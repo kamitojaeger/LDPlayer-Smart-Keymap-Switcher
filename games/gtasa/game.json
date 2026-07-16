@@ -58,7 +58,7 @@
   ],
 
   "none_state": {
-    "keymap": "keymaps/GTASA(walk mode).kmp",
+    "keymap": "keymaps/GTASA(Empty Keymap).kmp",
     "mouse_drag_key": null
   }
 }

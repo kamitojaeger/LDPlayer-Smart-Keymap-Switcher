@@ -55,14 +55,15 @@ class MonitorConfig:
     """监控循环配置（schema v2）。"""
 
     def __init__(self,
-                 injector=None,          # Injector 实例
-                 injector_path: str = None,  # 兼容旧接口
+                 injector=None,
+                 injector_path: str = None,
                  states_config: dict = None,
                  regions_config: dict = None,
                  detection_config: dict = None,
                  output_dir: str = None,
                  initial_state: str = None,
                  none_state_config: dict = None,
+                 none_state_frames: int = 20,
                  poll_interval_ms: int = 333,
                  debounce_count: int = 1,
                  match_threshold: float = 0.75,
@@ -107,6 +108,7 @@ class MonitorConfig:
         # 之后仅在不同状态之间切换才触发
         self.initial_state = initial_state
         self.none_state_config = none_state_config  # None=禁用, dict=启用
+        self.none_state_frames = none_state_frames  # 进入 none 的去抖帧数
         self.poll_interval_ms = poll_interval_ms
         self.debounce_count = debounce_count
         self.match_threshold = match_threshold
@@ -192,17 +194,19 @@ try:
                         sc[extra] = cfg[extra]
                 state_configs.append(sc)
 
+            none_allowed = (
+                self._none_state_enabled
+                and config.none_state_config is not None
+            )
             sm = StateMachine(
                 states=list(config.states_config.keys()),
                 threshold=config.match_threshold,
                 debounce_count=config.debounce_count,
-                none_state_allowed=(
-                    self._none_state_enabled
-                    and config.none_state_config is not None
-                ),
+                none_state_allowed=none_allowed,
+                none_state_debounce=config.none_state_frames,
                 priorities=config.priorities,
             )
-            sm.reset(config.initial_state)
+            sm.reset(STATE_NONE if none_allowed else config.initial_state)
 
             self.log_message.emit(
                 f"Monitor started: initial={sm.current}, "

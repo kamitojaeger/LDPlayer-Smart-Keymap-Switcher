@@ -1,0 +1,35 @@
+{
+    "keyboardMappings": [],
+    "configInfo": {
+        "version": 0,
+        "versionMessage": "",
+        "packageNameType": 0,
+        "packageNamePattern": "com.rockstargames.gtasa",
+        "resolutionType": 1,
+        "resolutionPattern": {
+            "width": 1920,
+            "height": 1080
+        },
+        "priority": 0,
+        "search": ""
+    },
+    "keyboardConfig": {
+        "mouseCenter": {
+            "x": 5000,
+            "y": 5000
+        },
+        "mouseScrollType": 0,
+        "discType": 0,
+        "advertising": false,
+        "advertiseDuration": 5000,
+        "advertiseText": "",
+        "cancelPoint": {
+            "x": 0,
+            "y": 0
+        },
+        "cancelKey": 0,
+        "cancelMode": 0,
+        "cursor": "lolCursor",
+        "extraData": ""
+    }
+}

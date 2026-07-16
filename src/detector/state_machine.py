@@ -41,23 +41,27 @@ class StateMachine:
                  threshold: float = 0.75,
                  debounce_count: int = 3,
                  none_state_allowed: bool = False,
+                 none_state_debounce: int = 20,
                  priorities: dict = None):
         """
         参数：
             states:             状态 ID 列表，如 ["walk", "drive"]
             threshold:          匹配率阈值，低于此值视为未识别
-            debounce_count:     连续 N 帧识别为同一状态才触发切换
-            none_state_allowed: 启用 __none__ 虚拟状态（无匹配也能触发切换）
+            debounce_count:     普通状态切换的去抖帧数
+            none_state_allowed: 启用 __none__ 虚拟状态
+            none_state_debounce: 进入 __none__ 的去抖帧数（独立于普通状态）
             priorities:         状态优先级 {state_id: int}，越大越优先，默认 0
         """
         self._real_states = list(states)
         self._none_state_allowed = none_state_allowed
         self._threshold = threshold
         self._debounce_count = debounce_count
+        self._none_debounce = none_state_debounce
         self._priorities = dict(priorities) if priorities else {}
         self._current: Optional[str] = None
-        self._pending: Optional[str] = None   # 当前正在累积的候选状态
-        self._pending_count: int = 0           # 连续计数
+        self._pending: Optional[str] = None
+        self._pending_count: int = 0
+        self._none_pending_count: int = 0  # 独立的 none 去抖计数
 
     @property
     def current(self) -> Optional[str]:
@@ -72,6 +76,7 @@ class StateMachine:
         self._current = initial_state
         self._pending = initial_state
         self._pending_count = self._debounce_count  # 初始状态无需去抖
+        self._none_pending_count = 0
 
     def update(self, match_results: dict) -> tuple:
         """
@@ -107,14 +112,28 @@ class StateMachine:
                 return False, self._current, None
 
         # 候选状态与上一帧相同 → 累加计数
+        # STATE_NONE 使用独立的去抖计数器
         if best_state == self._pending:
-            self._pending_count += 1
+            if best_state == STATE_NONE:
+                self._none_pending_count += 1
+            else:
+                self._pending_count += 1
         else:
             self._pending = best_state
-            self._pending_count = 1
+            if best_state == STATE_NONE:
+                self._none_pending_count = 1
+                self._pending_count = 0
+            else:
+                self._pending_count = 1
+                self._none_pending_count = 0
 
         # 去抖通过 → 触发切换
-        if self._pending_count >= self._debounce_count and self._pending != self._current:
+        if best_state == STATE_NONE:
+            threshold_met = (self._none_pending_count >= self._none_debounce)
+        else:
+            threshold_met = (self._pending_count >= self._debounce_count)
+
+        if threshold_met and self._pending != self._current:
             old = self._current
             self._current = self._pending
             return True, old, self._current

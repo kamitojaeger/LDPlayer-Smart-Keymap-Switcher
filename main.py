@@ -346,6 +346,7 @@ def run_gui(args):
             injector_path=injector_path,
             poll_interval_ms=settings.poll_interval_ms,
             debounce_count=settings.debounce_count,
+            none_state_frames=settings.none_state_frames,
         )
         config.injector = injector
 
@@ -355,7 +356,7 @@ def run_gui(args):
         thread = MonitorThread(config, parent_hwnd=hwnd,
                                show_toast=show_toast,
                                save_debug_screenshot=save_debug,
-                               none_state_enabled=settings.none_state_switch)
+                               none_state_enabled=settings.none_state_enabled)
         thread.status_changed.connect(window.on_status_changed)
         thread.match_score.connect(window.on_match_score)
         thread.log_message.connect(window.on_log)

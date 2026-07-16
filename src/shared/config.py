@@ -274,14 +274,13 @@ class GameConfig:
 
     def to_monitor_config(self, injector_path: str,
                           poll_interval_ms: int = 500,
-                          debounce_count: int = 3):
+                          debounce_count: int = 3,
+                          none_state_frames: int = 20):
         """生成 MonitorConfig 对象（v2：states_config 含 templates[] + regions）。"""
         from src.detector.monitor import MonitorConfig
 
         det = self.detection
-        # 初始状态设为 None，让状态机在首次检测到任何状态时自动切换按键
-        # 之后仅在不同状态之间切换才触发（None→state 仅生效一次）
-        initial = None
+        initial = "__none__" if self._data.get("none_state") else None
 
         states_config = {}
         priorities = {}
@@ -327,6 +326,7 @@ class GameConfig:
             detection_config=self.to_matcher_config(),
             initial_state=initial,
             none_state_config=self.none_state,
+            none_state_frames=none_state_frames,
             poll_interval_ms=poll_interval_ms if poll_interval_ms is not None
                 else det.get("interval_ms", 333),
             debounce_count=debounce_count,
@@ -392,7 +392,8 @@ class AppSettings:
             "debounce_count": 1,
             "show_debug_window": False,
             "save_debug_screenshot": False,
-            "none_state_switch": False,
+            "none_state_enabled": True,
+            "none_state_frames": 20,
         },
         "gui": {
             "start_minimized": False,
@@ -443,9 +444,14 @@ class AppSettings:
         return self._data.get("monitor", {}).get("save_debug_screenshot", False)
 
     @property
-    def none_state_switch(self) -> bool:
-        """无匹配结果自动释放鼠标：无匹配时切到首个 state 的按键方案。"""
-        return self._data.get("monitor", {}).get("none_state_switch", False)
+    def none_state_enabled(self) -> bool:
+        """N帧无匹配后切换到空白按键方案。默认 True。"""
+        return self._data.get("monitor", {}).get("none_state_enabled", True)
+
+    @property
+    def none_state_frames(self) -> int:
+        """进入 none 状态所需的连续无匹配帧数。默认 20。"""
+        return self._data.get("monitor", {}).get("none_state_frames", 20)
 
     @property
     def show_debug_window(self) -> bool:

@@ -150,7 +150,17 @@ class SettingsDialog(QDialog):
         gen_form.addRow(i.t("settings.save_debug_screenshot"), self._save_debug_check)
 
         self._none_state_check = QCheckBox()
-        gen_form.addRow(i.t("settings.none_state_switch"), self._none_state_check)
+        self._none_state_spin = QSpinBox()
+        self._none_state_spin.setRange(1, 999999)
+        self._none_state_spin.setValue(20)
+        self._none_state_spin.setSuffix(" " + i.t("settings.none_state_frames_unit"))
+        none_row = QHBoxLayout()
+        none_row.addWidget(self._none_state_check)
+        none_row.addWidget(self._none_state_spin)
+        none_row.addStretch()
+        none_widget = QWidget()
+        none_widget.setLayout(none_row)
+        gen_form.addRow(i.t("settings.none_state_enabled"), none_widget)
 
         # 语言
         self._lang_combo = QComboBox()
@@ -232,7 +242,8 @@ class SettingsDialog(QDialog):
         self._toast_duration.setValue(s.toast_duration_ms)
         self._debug_check.setChecked(s.show_debug_window)
         self._save_debug_check.setChecked(s.save_debug_screenshot)
-        self._none_state_check.setChecked(s.none_state_switch)
+        self._none_state_check.setChecked(s.none_state_enabled)
+        self._none_state_spin.setValue(s.none_state_frames)
 
         # 语言
         lang = s._data.get("gui", {}).get("language", "zh_CN")
@@ -281,8 +292,10 @@ class SettingsDialog(QDialog):
             self._debug_check.isChecked()
         s._data.setdefault("monitor", {})["save_debug_screenshot"] = \
             self._save_debug_check.isChecked()
-        s._data.setdefault("monitor", {})["none_state_switch"] = \
+        s._data.setdefault("monitor", {})["none_state_enabled"] = \
             self._none_state_check.isChecked()
+        s._data.setdefault("monitor", {})["none_state_frames"] = \
+            self._none_state_spin.value()
 
         # 语言
         lang = self._lang_combo.currentData()
