@@ -1,142 +1,135 @@
-# 开发者指南
+# Developer Guide
 
-## 项目结构
+> *[中文版](DEV_GUIDE_zh_CN.md)*
+
+## Project Structure
 
 ```
 LDPlayer_Auto_Input_Switcher/
-├── main.py                         # 入口：GUI + CLI 双模式
-├── requirements.txt                # Python 依赖
+├── main.py                         # Entry point: GUI + CLI dual mode
+├── requirements.txt                # Python dependencies
 ├── src/
-│   ├── core/                       # C++ x86 注入核心
-│   │   ├── keymap_hook.cpp         #   Hook DLL 源码
-│   │   ├── keymap_injector.cpp     #   注入器源码
-│   │   ├── hook_stub.asm           #   CALL hook 汇编跳板
-│   │   ├── version.rc              #   版本资源
-│   │   ├── build.bat / build.ps1   #   编译脚本
-│   ├── detector/                   # Python 检测引擎
-│   │   ├── capture.py              #   截图 (dxcam + RenderWindow)
-│   │   ├── matcher.py              #   OpenCV 模板匹配 + feature mask
-│   │   ├── state_machine.py        #   状态机 + 去抖
-│   │   ├── overlay.py              #   Toast 覆盖层
-│   │   └── monitor.py              #   监控主循环 + MonitorThread(QThread)
-│   ├── gui/                        # PySide6 图形界面
-│   │   ├── app.py                  #   QApplication + 单例
-│   │   ├── main_window.py          #   主窗口
-│   │   ├── game_panel.py           #   游戏面板
-│   │   ├── system_tray.py          #   系统托盘
-│   │   ├── settings_dialog.py      #   设置对话框
-│   │   └── about_dialog.py         #   关于对话框
-│   └── shared/                     # 共享工具
+│   ├── core/                       # C++ x86 injection core
+│   │   ├── keymap_hook.cpp         #   Hook DLL source
+│   │   ├── keymap_injector.cpp     #   Injector source
+│   │   ├── hook_stub.asm           #   CALL hook assembly trampoline
+│   │   ├── version.rc              #   Version resource
+│   │   ├── build.bat / build.ps1   #   Build scripts
+│   ├── detector/                   # Python detection engine
+│   │   ├── capture.py              #   Screen capture (dxcam + RenderWindow)
+│   │   ├── matcher.py              #   OpenCV template matching + feature mask
+│   │   ├── state_machine.py        #   State machine + debounce
+│   │   ├── overlay.py              #   Toast overlay
+│   │   └── monitor.py              #   Main monitoring loop + MonitorThread (QThread)
+│   ├── gui/                        # PySide6 GUI
+│   │   ├── app.py                  #   QApplication + singleton
+│   │   ├── main_window.py          #   Main window
+│   │   ├── game_panel.py           #   Game panel
+│   │   ├── system_tray.py          #   System tray
+│   │   ├── settings_dialog.py      #   Settings dialog
+│   │   └── about_dialog.py         #   About dialog
+│   └── shared/                     # Shared utilities
 │       ├── config.py               #   GameConfig + AppSettings
-│       ├── ldplayer.py             #   LDPlayer 检测
-│       ├── injector.py             #   Injector 封装
-│       └── i18n.py                 #   多语言
-├── games/                          # 游戏数据 (纯数据，无代码)
+│       ├── ldplayer.py             #   LDPlayer detection
+│       ├── injector.py             #   Injector wrapper
+│       └── i18n.py                 #   Internationalization
+├── games/                          # Game data (pure data, no code)
 │   ├── gtasa/                      #   GTA: San Andreas
-│   │   ├── game.json               #     游戏配置
-│   │   ├── templates/              #     模板截图
-│   │   └── keymaps/                #     按键方案 .kmp
-│   └── _template/                  #   新游戏模板
-├── config/                         # 全局配置
-│   ├── settings.json               #   用户设置
-│   └── ldplayer_versions.json      #   版本偏移表
-├── dist/                           # C++ 编译产物 (随发布包)
-├── locales/                        # 翻译文件
+│   │   ├── game.json               #      Game config
+│   │   ├── templates/              #      Template screenshots
+│   │   └── keymaps/                #      Keymap .kmp files
+│   └── _template/                  #   New game template
+├── config/                         # Global configuration
+│   ├── settings.json               #   User settings
+│   └── ldplayer_versions.json      #   Version offset table
+├── dist/                           # Pre-compiled C++ (shipped with releases)
+├── locales/                        # Translation files
 │   ├── zh_CN.json
 │   └── en_US.json
-├── docs/                           # 本文档
-└── scripts/                        # 辅助脚本
-    └── package.py                  #   PyInstaller 打包
+├── docs/                           # Documentation
+└── scripts/                        # Utility scripts
+    └── templateDebugger.py         #   Template matching debug tool
 ```
 
-## 模块职责
+## Module Responsibilities
 
-### 检测引擎 (`src/detector/`)
+### Detection Engine (`src/detector/`)
 
-| 模块 | 职责 |
+| Module | Responsibility |
 |---|---|
-| `capture.py` | 枚举 LDPlayer 窗口，获取 RenderWindow 或 ClientRect 截图区域，dxcam 捕获 |
-| `matcher.py` | OpenCV 模板匹配 + feature mask 生成，支持多模板批量匹配 |
-| `state_machine.py` | 状态机，N 帧去抖，仅在连续相同状态时触发切换 |
-| `overlay.py` | 自定义 Toast，显示切换提示 |
-| `monitor.py` | 监控主循环，串联上述模块；MonitorThread(QThread) 驱动 GUI |
+| `capture.py` | Enumerate LDPlayer windows, locate RenderWindow or ClientRect capture region, dxcam capture |
+| `matcher.py` | OpenCV template matching + feature mask generation, supports multi-template batch matching |
+| `state_machine.py` | State machine, N-frame debounce, triggers switch only on consecutive identical states |
+| `overlay.py` | Custom Toast overlay for switch notifications |
+| `monitor.py` | Main monitoring loop, orchestrates above modules; MonitorThread(QThread) drives GUI updates |
 
-### 数据流
+### Data Flow
 
 ```
-用户点击"启动" → MonitorThread.start()
-  → 每 333ms: capture.py 截图
-  → matcher.py: 模板匹配
-  → state_machine.py: 去抖 + 变化检测
-  → 若变化: injector.py 调用 keymap_injector.exe
-  → 发送 mouse_drag_key (如需要)
-  → 信号 → GUI 更新
+User clicks "Start" → MonitorThread.start()
+  → Every 333ms: capture.py screenshot
+  → matcher.py: template matching
+  → state_machine.py: debounce + change detection
+  → If changed: injector.py invokes keymap_injector.exe
+  → Send mouse_drag_key (if needed)
+  → Signal → GUI update
 ```
 
-## 如何添加新游戏
+## Adding a New Game
 
-1. **复制模板**
+1. **Copy template**
    ```bash
    cp -r games/_template games/my_game
    ```
 
-2. **编辑 `game.json`**
+2. **Edit `game.json`**
    ```json
    {
      "name": "My Game",
      "package": "com.example.mygame",
      "states": [
-       {"id": "state_a", "name": "状态A", "template": "templates/state_a.png",
+       {"id": "state_a", "name": "State A", "template": "templates/state_a.png",
         "keymap": "keymaps/state_a.kmp", "mouse_drag_key": null},
-       {"id": "state_b", "name": "状态B", "template": "templates/state_b.png",
+       {"id": "state_b", "name": "State B", "template": "templates/state_b.png",
         "keymap": "keymaps/state_b.kmp", "mouse_drag_key": 17}
      ]
    }
    ```
 
-3. **准备素材**
-   - 截取游戏内各状态的代表性图标，存入 `templates/`
-   - 从 LDPlayer 导出对应按键方案 `.kmp`，存入 `keymaps/`
+3. **Prepare assets**
+   - Capture representative UI elements for each game state, save to `templates/`
+   - Export corresponding keymap `.kmp` from LDPlayer, save to `keymaps/`
 
-4. **验证**
+4. **Verify**
    ```bash
    python main.py --cli --game my_game
    ```
-   确保各状态匹配率 > 0.75。
+   Ensure match rates > 0.75 for all states.
 
-5. **模板截图建议**
-   - 选择独特、不随游戏内容变化的 UI 元素（如右下角状态图标）
-   - PNG 格式，约 180×178 像素
-   - 分辨率与游戏设置一致
+5. **Screenshot tips**
+   - Choose distinctive UI elements that don't change with game content (e.g., bottom-right status icons)
+   - PNG format, approximately 180×178 pixels
+   - Resolution matching game settings
 
-## 编译 C++ 组件
+## Building C++ Components
 
-需要 Visual Studio 2022 Community + Windows SDK 10.x。
+Requires Visual Studio 2022 Community + Windows SDK 10.x.
 
 ```bash
-# 在 src/core/ 目录下
+# From src/core/ directory
 build.bat
 ```
 
-产物：`keymap_hook.dll` + `keymap_injector.exe`（均为 x86）。
+Output: `keymap_hook.dll` + `keymap_injector.exe` (both x86).
 
-手动复制到 `dist/`。
+Copy them to `dist/` manually.
 
-## 打包发布
+## Config Format
 
-```bash
-python scripts/package.py          # 单文件 --onefile
-python scripts/package.py --dir    # 目录模式 --onedir
-python scripts/package.py --clean  # 清理构建产物
-```
+See [GAME_CONFIG.md](../GAME_CONFIG.md).
 
-## 配置格式
+## Important Notes
 
-详见 `Project_Overhaul/DATA_SCHEMA.md`。
-
-## 注意事项
-
-1. **C++ 编译目标必须为 x86**：dnplayer.exe 是 32 位进程
-2. **仅支持 LDPlayer 海外版** (9 / 14)：国内版 Ctrl+F 机制不同
-3. **备份目录只读**：`hook_demo/backup_vN/` 不得修改
-4. **CFW hook 非线程安全**：当前使用"恢复-调用-重装"模式
+1. **C++ build target must be x86**: dnplayer.exe is a 32-bit process
+2. **LDPlayer Overseas only** (9 / 14): The domestic version has a different Ctrl+F mechanism
+3. **CFW hook is not thread-safe**: Currently uses "restore-call-reinstall" pattern

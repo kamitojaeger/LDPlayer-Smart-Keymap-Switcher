@@ -1,12 +1,14 @@
-# Game Config 格式规范
+# Game Config Format Specification
 
-> 版本: schema v2 | 最后更新: 2026-07-16
+> *[中文版](GAME_CONFIG_zh_CN.md)*
 
-每个游戏一个文件夹 `games/<name>/`，内含 `game.json` + `keymaps/` + `templates/`。
+> Version: schema v2 | Last updated: 2026-07-16
+
+Each game has its own folder `games/<name>/` containing `game.json` + `keymaps/` + `templates/`.
 
 ---
 
-## 1. 顶层结构
+## 1. Top-Level Structure
 
 ```json
 {
@@ -21,20 +23,20 @@
 }
 ```
 
-| 字段 | 类型 | 必需 | 说明 |
+| Field | Type | Required | Description |
 |---|---|---|---|
-| `schema_version` | int | ✅ | 固定 `2` |
-| `name` | str | ✅ | 游戏显示名 |
-| `package` | str \| str[] | ✅ | Android 包名，用于 dir_kmps.dir 过滤。多包名用数组 |
-| `resolution` | object | | 参考分辨率，默认 1920×1080 |
-| `detection` | object | ✅ | 检测参数 |
-| `regions` | object | ✅ | 命名区域池 |
-| `states` | list | ✅ | 状态定义列表 |
-| `none_state` | object | | 无匹配时使用的按键配置 |
+| `schema_version` | int | ✅ | Always `2` |
+| `name` | str | ✅ | Display name of the game |
+| `package` | str \| str[] | ✅ | Android package name(s), used for dir_kmps.dir filtering. Use array for multiple packages |
+| `resolution` | object | | Reference resolution, default 1920×1080 |
+| `detection` | object | ✅ | Detection parameters |
+| `regions` | object | ✅ | Named region pool |
+| `states` | list | ✅ | State definition list |
+| `none_state` | object | | Keymap to use when no state matches |
 
 ---
 
-## 2. detection — 检测参数
+## 2. detection — Detection Parameters
 
 ```json
 {
@@ -50,20 +52,20 @@
 }
 ```
 
-| 字段 | 默认 | 说明 |
+| Field | Default | Description |
 |---|---|---|
-| `ref_game_w` | 1920 | 参考游戏区宽度 |
-| `ref_game_h` | 1080 | 参考游戏区高度 |
-| `ref_titlebar_h` | 60 | 标题栏高度（RenderWindow 模式自动忽略） |
-| `match_threshold` | 0.75 | 全局匹配阈值 |
-| `feature_mask.dark_percentile` | 22 | 暗部百分位 |
-| `feature_mask.bright_percentile` | 82 | 亮部百分位 |
+| `ref_game_w` | 1920 | Reference game area width |
+| `ref_game_h` | 1080 | Reference game area height |
+| `ref_titlebar_h` | 60 | Title bar height (auto-ignored in RenderWindow mode) |
+| `match_threshold` | 0.75 | Global match threshold |
+| `feature_mask.dark_percentile` | 22 | Dark pixel percentile |
+| `feature_mask.bright_percentile` | 82 | Bright pixel percentile |
 
 ---
 
-## 3. regions — 识别区域 (xywh 格式)
+## 3. regions — Search Regions (xywh format)
 
-**推荐 xywh 格式**（基于 1920×1080 参考坐标系）：
+**Recommended xywh format** (based on 1920×1080 reference coordinate system):
 
 ```json
 {
@@ -77,19 +79,19 @@
 }
 ```
 
-| 字段 | 类型 | 说明 |
+| Field | Type | Description |
 |---|---|---|
-| `x` | int | 模板预期左上角 X (1920×1080 参考) |
-| `y` | int | 模板预期左上角 Y |
-| `width` | int | 区域宽度 (0 = 用模板实际宽度) |
-| `height` | int | 区域高度 (0 = 用模板实际高度) |
-| `search_expand` | int | 四向扩展像素，默认 8 |
+| `x` | int | Expected top-left X of the template (1920×1080 reference) |
+| `y` | int | Expected top-left Y of the template |
+| `width` | int | Region width (0 = use template's actual width) |
+| `height` | int | Region height (0 = use template's actual height) |
+| `search_expand` | int | Pixel expansion in all 4 directions, default 8 |
 
-**搜索矩形** = `(x-expand, y-expand, x+width+expand, y+height+expand)`
+**Search rectangle** = `(x-expand, y-expand, x+width+expand, y+height+expand)`
 
-**约束**: `x + 模板宽 + expand ≤ 1920`，`y + 模板高 + expand ≤ 1080`。超出会触发 `TPL TOO LARGE` 错误。
+**Constraints**: `x + template_width + expand ≤ 1920`, `y + template_height + expand ≤ 1080`. Violation triggers `TPL TOO LARGE` error.
 
-**旧格式**（兼容 GTASA，不推荐新游戏使用）：
+**Legacy format** (compatible with GTASA, not recommended for new games):
 
 ```json
 {
@@ -103,19 +105,19 @@
 }
 ```
 
-支持 `bottom_right/bottom_left/top_right/top_left/center` 五种定位方法。
+Supports 5 positioning methods: `bottom_right` / `bottom_left` / `top_right` / `top_left` / `center`.
 
 ---
 
-## 4. states — 状态定义
+## 4. states — State Definitions
 
-### 4.1 基础字段
+### 4.1 Base Fields
 
 ```json
 {
   "id": "vehicle_drive_1",
-  "name": "车辆驾驶",
-  "description": "车辆驾驶状态 — 四方向箭头外圈可见",
+  "name": "Vehicle Driving",
+  "description": "Vehicle driving state — four arrow outer rings visible",
   "keymap": "keymaps/CODM((car_drive_1).kmp",
   "mouse_drag_key": null,
   "priority": 12,
@@ -127,46 +129,46 @@
 }
 ```
 
-| 字段 | 类型 | 必需 | 说明 |
+| Field | Type | Required | Description |
 |---|---|---|---|
-| `id` | str | ✅ | 唯一标识，日志和状态机使用 |
-| `name` | str | | 显示名 |
-| `description` | str | | 描述 |
-| `keymap` | str | ✅ | .kmp 文件相对路径 (基于游戏目录) |
-| `mouse_drag_key` | int \| null | | 虚拟键码，切换到此状态后发送。`null`=不发送。可从 .kmp 文件自动解析 |
-| `priority` | int | | 多状态竞争时的优先级，默认 0。越大越优先 |
-| `match_logic` | str | ✅ | `"any"` = 任一模板匹配即通过 / `"all"` = 全部模板必须匹配 |
-| `templates` | list | ✅ | 模板列表 |
+| `id` | str | ✅ | Unique identifier, used in logs and state machine |
+| `name` | str | | Display name |
+| `description` | str | | Description |
+| `keymap` | str | ✅ | Relative path to .kmp file (relative to game directory) |
+| `mouse_drag_key` | int \| null | | Virtual key code to send after switching. `null` = don't send. Auto-parsed from .kmp if omitted |
+| `priority` | int | | Priority when multiple states compete, default 0. Higher = wins |
+| `match_logic` | str | ✅ | `"any"` = any template match passes / `"all"` = all templates must match |
+| `templates` | list | ✅ | Template list |
 
-### 4.2 templates 条目
+### 4.2 Template Entries
 
 ```json
 { "path": "templates/vehicle/Drive_1_upArrow.png", "region": "tl_arrow_up" }
 ```
 
-| 字段 | 类型 | 必需 | 说明 |
+| Field | Type | Required | Description |
 |---|---|---|---|
-| `path` | str | ✅ | 模板 PNG 相对路径 |
-| `region` | str | | regions 中的区域 ID，默认 `"default"` |
-| `matching_mode` | str | | `"pixel"`(默认) / `"hog"` / `"edge"` |
-| `threshold` | float | | 单模板阈值覆盖 |
+| `path` | str | ✅ | Relative path to template PNG |
+| `region` | str | | Region ID from regions pool, default `"default"` |
+| `matching_mode` | str | | `"pixel"`(default) / `"hog"` / `"edge"` |
+| `threshold` | float | | Per-template threshold override |
 
-### 4.3 min_pass_ratio — 宽松 all 逻辑
+### 4.3 min_pass_ratio — Relaxed "all" Logic
 
-仅 `match_logic: "all"` 且模板 ≥ 3 时生效：
+Only applies when `match_logic: "all"` and templates ≥ 3:
 
 ```json
 { "match_logic": "all", "min_pass_ratio": 0.75 }
 ```
 
-| min_pass_ratio | 4 模板 | 5 模板 | 效果 |
+| min_pass_ratio | 4 templates | 5 templates | Effect |
 |---|---|---|---|
-| 无 (默认) | 4/4 | 5/5 | 全部必须通过全局阈值 |
-| 0.75 | 3/4 | 4/5 | ≥75% 通过即可，combined = 通过者最低分 |
+| None (default) | 4/4 | 5/5 | All must pass global threshold |
+| 0.75 | 3/4 | 4/5 | ≥75% passing is sufficient, combined = minimum score among passers |
 
-2 模板的 `all` 不会放宽（安全考虑）。
+2-template `all` is never relaxed (safety).
 
-### 4.4 negative_templates — 反向抑制
+### 4.4 negative_templates — Negative Suppression
 
 ```json
 {
@@ -177,18 +179,18 @@
 }
 ```
 
-| 字段 | 类型 | 说明 |
+| Field | Type | Description |
 |---|---|---|
-| `negative_templates` | list | 反向模板列表，格式同 `templates` |
-| `negative_penalty` | float | 压制强度，默认 0.50 |
+| `negative_templates` | list | Negative template list, same format as `templates` |
+| `negative_penalty` | float | Suppression strength, default 0.50 |
 
-**逻辑**: 当任意反向模板匹配分数 ≥ 0.35 时，state 的 combined 分数乘以 `(1 - penalty × best_neg/0.75)`。
+**Logic**: When any negative template match score ≥ 0.35, the state's combined score is multiplied by `(1 - penalty × best_neg/0.75)`.
 
-典型场景：`vehicle_passenger` 的 `leaveVehicle` 按钮在驾驶场景中可能误匹配，用 `Drive_carHorn` 做反向模板压制其分数。
+Typical use case: `vehicle_passenger`'s `leaveVehicle` icon may falsely match in driving scenes; use `Drive_carHorn` as a negative template to suppress its score.
 
 ---
 
-## 5. none_state — 无匹配状态
+## 5. none_state — No-Match State
 
 ```json
 {
@@ -199,31 +201,30 @@
 }
 ```
 
-当所有 state 分数都低于阈值且 `none_state_switch: true` 时触发。
+Triggered when all state scores fall below the threshold and `none_state_switch: true`.
 
 ---
 
-## 6. 添加新游戏 Checklist
+## 6. Adding a New Game — Checklist
 
-1. 复制 `games/_template/` → `games/<新游戏>/`
-2. 编辑 `game.json`：填写 package / states / regions
-3. 截图放入 `templates/`（**1920×1080 PNG，建议工具内置截图功能输出**）
-4. 从 LDPlayer 导出 .kmp → `keymaps/`
-5. 运行 `scripts/templateDebugger.py` 调试每个模板的 region
-6. 运行 `scripts/scan_regions.py` 辅助推算初始 region
-7. 用 EXE 实测
+1. Copy `games/_template/` → `games/<new_game>/`
+2. Edit `game.json`: fill in package / states / regions
+3. Place screenshots in `templates/` (**1920×1080 PNG**)
+4. Export .kmp from LDPlayer → `keymaps/`
+5. Run `scripts/templateDebugger.py` to debug region for each template
+6. Test with the EXE
 
 ---
 
-## 7. templateDebugger 调试流程
+## 7. templateDebugger Usage
 
 ```bash
-# 单模板
+# Single template
 python scripts/templateDebugger.py \
   --screenshot codm_walk.png \
   --template "games/CODM/templates/walk+swim+flying/jump.png"
 
-# 多模板
+# Multiple templates
 python scripts/templateDebugger.py \
   --screenshot codm_vehicle.png \
   --template "games/CODM/templates/vehicle/Drive_1_upArrow.png" \
@@ -231,4 +232,4 @@ python scripts/templateDebugger.py \
   --output debug_arrows
 ```
 
-输出 `*_debug.png`：红色框=搜索区域，绿色/黄色=匹配位置，每个模板独立标注。
+Output `*_debug.png`: red boxes = search regions, green/yellow = match positions, each template labeled independently.
