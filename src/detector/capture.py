@@ -172,7 +172,7 @@ def resolve_capture_target(process_name: str):
     wins = find_visible_windows(process_name)
     if wins:
         hwnd, rect, _ = wins[0]
-        return rect, "进程可见窗口", wins
+        return rect, "process visible window", wins
 
     # 无可见窗口 → 针对 headless 渲染进程
     if process_name.lower() == "ld9boxheadless.exe":
@@ -184,10 +184,10 @@ def resolve_capture_target(process_name: str):
         if client:
             return (
                 client,
-                "dnplayer 客户端区域(回退: Ld9BoxHeadless 无可见窗口, 安卓画面已合成进 dnplayer)",
+                "dnplayer client area (fallback: Ld9BoxHeadless no visible window, Android composited into dnplayer)",
                 [],
             )
-    return None, "未找到可见窗口", wins
+    return None, "no visible window found", wins
 
 
 # ---------------------------------------------------------------------------
@@ -211,8 +211,8 @@ def capture_region(rect, output_color="RGB"):
     camera = dxcam.create(output_idx=0, output_color=output_color)
     if camera is None:
         raise RuntimeError(
-            "dxcam.create() 失败：当前环境可能不支持 Desktop Duplication"
-            "（无显示器/GPU，或被远程桌面/会话占用）"
+            "dxcam.create() failed: Desktop Duplication may not be supported"
+            " (no display/GPU, or remote desktop/session in use)"
         )
     frame = camera.grab(region=(left, top, right, bottom))
     return frame

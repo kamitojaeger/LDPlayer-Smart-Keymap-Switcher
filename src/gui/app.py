@@ -66,7 +66,6 @@ class App(QApplication):
         QMessageBox.warning(
             None,
             self.applicationName(),
-            "应用已在运行中，请检查系统托盘。\n"
             "Application is already running. Check the system tray.",
         )
 
