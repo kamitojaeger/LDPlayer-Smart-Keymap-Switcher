@@ -1,111 +1,112 @@
 # LDPlayer Auto Input Switcher
 
-LDPlayer 模拟器按键方案自动切换工具。通过 OpenCV 模板匹配识别游戏内状态，自动切换对应的按键方案。
+> *[中文版](README_zh_CN.md)*
+
+Automatically switch LDPlayer emulator keymap schemes based on in-game state detection via OpenCV template matching.
 
 ![Platform](https://img.shields.io/badge/Platform-Windows-blue)
 ![License](https://img.shields.io/badge/License-LGPL%20v3-green)
 ![Python](https://img.shields.io/badge/Python-3.11%2B-blue)
 ![LDPlayer](https://img.shields.io/badge/LDPlayer-9%20%7C%2014%20(Overseas)-orange)
 
-## 功能
+## Features
 
-- **自动检测** — OpenCV 模板匹配识别游戏状态（行走/驾驶/飞行等）
-- **一键切换** — DLL 注入 + inline hook，无弹窗切换按键方案
-- **系统托盘** — 后台静默运行，右键一键启停
-- **多游戏支持** — 统一 `game.json` 配置，添加新游戏零代码改动
-- **多语言** — 中文 / English，首次启动跟随系统语言
-- **零配置启动** — PyInstaller 打包，解压即用，无需安装任何环境
-- **无匹配状态处理** — 可选的"无匹配结果自动释放鼠标"（none_state）
-- **KMP 自动同步** — 启动监控时自动将游戏按键文件复制到 LDPlayer 目录
+- **Auto Detection** — OpenCV template matching recognizes game states (walking/driving/flying, etc.)
+- **Seamless Switching** — DLL injection + inline hook, switches keymaps without any popups
+- **System Tray** — Runs silently in background, right-click to start/stop
+- **Multi-Game Support** — Unified `game.json` config; add new games with zero code changes
+- **Multi-Language** — Chinese / English, auto-detects system language on first launch
+- **Zero Setup** — PyInstaller single-file EXE, unzip and run, no environment required
+- **No-Match Handling** — Optional "release mouse on no match" (none_state)
+- **KMP Auto-Sync** — Automatically copies game keymap files to LDPlayer directory on start
 
-## 快速开始
+## Quick Start
 
-### 运行环境
+### Requirements
 
 - Windows 10/11
-- LDPlayer 9 或 LDPlayer 14（海外版）
-- 无需安装 Python / OpenCV / Visual Studio
+- LDPlayer 9 or LDPlayer 14 (Overseas version)
+- No Python / OpenCV / Visual Studio installation needed
 
-### 使用步骤
+### Usage
 
-1. 下载并解压发布包
-2. 启动 LDPlayer，打开目标游戏
-3. 双击 `AutoInputSwitcher.exe`
-4. 主窗口自动显示（不隐藏到托盘）
-5. 选择游戏 → 点 **启动监控**
-6. 游戏状态变化时按键方案自动切换
+1. Download and extract the release package
+2. Launch LDPlayer and open your game
+3. Double-click `AutoInputSwitcher.exe`
+4. Select a game → click **Start Monitor**
+5. Keymap schemes switch automatically as game state changes
 
-### 首次使用
+### First Launch
 
-工具首次启动会自动：
-- 检测系统语言（中文系统 → 中文，其他 → English）
-- 扫描 `games/` 目录下所有游戏配置
-- 自动检测 LDPlayer 安装路径和版本
-- 启动监控时检查并同步 .kmp 文件
+The tool automatically:
+- Detects system language (Chinese → zh_CN, others → en_US)
+- Scans `games/` directory for all game configurations
+- Auto-detects LDPlayer installation path and version
+- Checks and syncs .kmp files when starting the monitor
 
-## 支持的游戏
+## Supported Games
 
-| 游戏 | 状态 | 识别模式 |
+| Game | Status | Detection Modes |
 |---|---|---|
-| GTA: San Andreas | ✅ | 行走 / 驾驶 |
-| Black Russia | 🔧 开发中 | — |
-| CODM | 🔧 开发中 | — |
+| GTA: San Andreas | ✅ | Walk / Drive |
+| Black Russia | ✅ | Walk / Drive |
+| CODM | ✅ | Walk / Drive |
 
-### 添加新游戏
+### Adding New Games
 
-参考 `games/_template/`，详见 [GAME_CONFIG.md](GAME_CONFIG.md)：
+See `games/_template/` and [GAME_CONFIG.md](GAME_CONFIG.md):
 
-1. 复制 `games/_template/` → 重命名为 `games/<游戏名>/`
-2. 编辑 `game.json`：name / package / states / regions / detection
-3. 放入截图模板到 `templates/`
-4. 导出 LDPlayer 按键方案 `.kmp` 到 `keymaps/`
-5. 重新启动工具即可
+1. Copy `games/_template/` → rename to `games/<game_name>/`
+2. Edit `game.json`: name / package / states / regions / detection
+3. Place screenshot templates in `templates/`
+4. Export LDPlayer keymap `.kmp` files to `keymaps/`
+5. Restart the tool
 
-## 目录结构
+## Directory Structure
 
 ```
-├── AutoInputSwitcher.exe    # 主程序（PyInstaller 打包）
-├── dist/                    # C++ 预编译注入组件
+├── AutoInputSwitcher.exe    # Main program (PyInstaller)
+├── dist/                    # Pre-compiled C++ injection components
 │   ├── keymap_hook.dll      #   Hook DLL (x86)
-│   └── keymap_injector.exe  #   注入器 (x86)
-├── games/                   # 游戏数据（可独立更新，无需重新打包）
+│   └── keymap_injector.exe  #   Injector (x86)
+├── games/                   # Game data (updatable without re-packaging)
 │   ├── gtasa/               #   GTA: San Andreas
-│   ├── _template/           #   添加新游戏模板
+│   ├── _template/           #   Template for new games
 │   └── ...
-├── config/                  # 全局配置
-│   ├── settings.json        #   用户设置
-│   └── ldplayer_versions.json  # LDPlayer 版本偏移表
-├── locales/                 # 翻译文件
+├── config/                  # Global configuration
+│   ├── settings.json        #   User settings
+│   └── ldplayer_versions.json  # LDPlayer version offset table
+├── locales/                 # Translations
 │   ├── zh_CN.json
 │   └── en_US.json
-├── src/                     # 源码（Python + C++）
+├── src/                     # Source code (Python + C++)
 └── README.md
 ```
 
-## 技术栈
+## Tech Stack
 
-| 层 | 技术 |
+| Layer | Technology |
 |---|---|
 | GUI | PySide6 (Qt for Python) |
-| 图像识别 | OpenCV (TM_CCOEFF_NORMED + feature mask) |
-| 截图 | RenderWindow 子窗口 / dxcam ClientRect 回退 |
-| 注入层 | C++ x86 DLL inject + inline CALL hook + CFW redirect |
-| 打包 | PyInstaller --onefile |
+| Image Recognition | OpenCV (TM_CCOEFF_NORMED + feature mask) |
+| Screen Capture | RenderWindow child window / dxcam ClientRect fallback |
+| Injection | C++ x86 DLL inject + inline CALL hook + CFW redirect |
+| Packaging | PyInstaller --onefile |
 
-## 常见问题
+## FAQ
 
-### 杀毒软件报警
+### Antivirus warnings
 
-DLL 注入技术可能被 Windows Defender 标记。将安装目录添加到 Defender 排除列表即可。
+DLL injection techniques may be flagged by Windows Defender. Add the install directory to Defender's exclusion list.
 
-### 切换提示与实际按键不符
+### Toast shows wrong keymap name
 
-工具使用自定义 Toast 覆盖层显示切换信息，默认启用。可在设置中关闭。
+The tool uses a custom semi-transparent Toast overlay for status notifications, enabled by default. Can be disabled in Settings.
 
-### 如何获取 LDPlayer 的 .kmp 按键文件
+### How to get .kmp keymap files from LDPlayer
 
-在 LDPlayer 中手动设置好按键 → 进入 `安装路径/vms/customizeConfigs/` → 找到对应游戏的 `.kmp` 文件。
+Set up your keymap in LDPlayer → go to `<LDPlayer path>/vms/customizeConfigs/` → find the `.kmp` file for your game.
 
-## 许可
+## License
 
 LGPL v3
