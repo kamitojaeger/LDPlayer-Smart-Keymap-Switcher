@@ -42,8 +42,10 @@ step2_disasm_context.txt
 tmp_matcher_header.txt
 memoryMapOutput.txt
 
-# Intermediate scan results
-scripts/scan_result_*/
+# scripts/ — only templateDebugger.py is public; all other scripts, scan results,
+# games duplicates, and probe data are dev-only
+scripts/*
+!scripts/templateDebugger.py
 
 # Build artifacts (all directories; explicit exceptions for dist/)
 *.dll
@@ -64,13 +66,14 @@ hook_demo/
 archive/
 Project_Overhaul/
 
-# Duplicate game data (canonical copy is games/)
-scripts/games/
-
 # External binaries (users should download separately)
 adb.exe
 
-# Dev docs & internal notes (not for public repo)
+# Dev-only documentation & internal notes (not for public repo)
+DEVDOC.md
+HANDOVER.md
+PROJECT_SUMMARY.md
+REVERSE_ENGINEERING_REPORT.md
 docs/KEYMAP_COUNT_DECEPTION_PLAN.md
 docs/MEMORY_KEYMAP_DEV_PLAN.md
 docs/REVERSE_ENGINEERING.md
