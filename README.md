@@ -53,13 +53,13 @@ LDPlayer 模拟器按键方案自动切换工具。通过 OpenCV 模板匹配识
 
 ### 添加新游戏
 
-参考 `games/_template/`，详见 [Project_Overhaul/DATA_SCHEMA.md](Project_Overhaul/DATA_SCHEMA.md)：
+参考 `games/_template/`，详见 [GAME_CONFIG.md](GAME_CONFIG.md)：
 
 1. 复制 `games/_template/` → 重命名为 `games/<游戏名>/`
 2. 编辑 `game.json`：name / package / states / regions / detection
 3. 放入截图模板到 `templates/`
 4. 导出 LDPlayer 按键方案 `.kmp` 到 `keymaps/`
-5. 使用 `scripts/scan_regions.py` 辅助推算识别区域 → 重新启动工具即可
+5. 重新启动工具即可
 
 ## 目录结构
 
@@ -78,10 +78,9 @@ LDPlayer 模拟器按键方案自动切换工具。通过 OpenCV 模板匹配识
 ├── locales/                 # 翻译文件
 │   ├── zh_CN.json
 │   └── en_US.json
-└── README.txt
+├── src/                     # 源码（Python + C++）
+└── README.md
 ```
-
-源码目录结构详见 [Project_Overhaul/OVERHAUL_PLAN.md](Project_Overhaul/OVERHAUL_PLAN.md)。
 
 ## 技术栈
 
@@ -92,7 +91,6 @@ LDPlayer 模拟器按键方案自动切换工具。通过 OpenCV 模板匹配识
 | 截图 | RenderWindow 子窗口 / dxcam ClientRect 回退 |
 | 注入层 | C++ x86 DLL inject + inline CALL hook + CFW redirect |
 | 打包 | PyInstaller --onefile |
-| 开发辅助 | `scripts/scan_regions.py` — 全图模板匹配 + regions 推算 |
 
 ## 常见问题
 

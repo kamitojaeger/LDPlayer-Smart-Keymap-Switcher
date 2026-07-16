@@ -1,5 +1,0 @@
-dxcam
-pywin32
-pillow
-numpy
-opencv-python-headless

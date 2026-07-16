@@ -58,12 +58,11 @@ scripts/scan_result_*/
 
 # Build logs
 build_log.txt
-hook_demo/build_log.txt
 
-# Test KMP files in hook_demo
-hook_demo/*.kmp
-hook_demo/**/*.kmp
-hook_demo/test/
+# Excluded directories (dev-only, not part of the release)
+hook_demo/
+archive/
+Project_Overhaul/
 
 # Duplicate game data (canonical copy is games/)
 scripts/games/
