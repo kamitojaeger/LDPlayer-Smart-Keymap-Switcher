@@ -1,0 +1,463 @@
+{
+    "keyboardMappings": [
+        {
+            "class": "ClassKeyboardDisc",
+            "data": {
+                "type": 0,
+                "origin": {
+                    "x": 1825,
+                    "y": 7690
+                },
+                "radius": 772,
+                "leftKey": 65,
+                "upKey": 87,
+                "rightKey": 68,
+                "downKey": 83,
+                "description": "",
+                "moreDescription": "",
+                "extraData": "",
+                "hintVisible": true,
+                "hintOffset": {
+                    "x": 0,
+                    "y": 0
+                }
+            }
+        },
+        {
+            "class": "ClassKeyboardCurve",
+            "data": {
+                "key": 77,
+                "secondKey": 0,
+                "curve": [
+                    {
+                        "x": 622,
+                        "y": 682,
+                        "timing": 0
+                    },
+                    {
+                        "x": 622,
+                        "y": 682,
+                        "timing": 94
+                    }
+                ],
+                "extraData": "",
+                "description": "",
+                "moreDescription": "",
+                "hintVisible": true,
+                "hintOffset": {
+                    "x": 0,
+                    "y": 0
+                }
+            }
+        },
+        {
+            "class": "ClassKeyboardCurve",
+            "data": {
+                "key": 192,
+                "secondKey": 0,
+                "curve": [
+                    {
+                        "x": 9609,
+                        "y": 757,
+                        "timing": 0
+                    },
+                    {
+                        "x": 9602,
+                        "y": 757,
+                        "timing": 54
+                    },
+                    {
+                        "x": 9595,
+                        "y": 757,
+                        "timing": 62
+                    },
+                    {
+                        "x": 9588,
+                        "y": 757,
+                        "timing": 86
+                    },
+                    {
+                        "x": 9588,
+                        "y": 757,
+                        "timing": 86
+                    }
+                ],
+                "extraData": "",
+                "description": "",
+                "moreDescription": "",
+                "hintVisible": true,
+                "hintOffset": {
+                    "x": 0,
+                    "y": 0
+                }
+            }
+        },
+        {
+            "class": "ClassMouseTrigger",
+            "data": {
+                "point": {
+                    "x": 9339,
+                    "y": 6938
+                },
+                "description": "",
+                "moreDescription": "",
+                "hintVisible": true,
+                "hintOffset": {
+                    "x": 0,
+                    "y": 0
+                },
+                "extraData": ""
+            }
+        },
+        {
+            "class": "ClassMouseDrag",
+            "data": {
+                "key": 17,
+                "mode": 0,
+                "origin": {
+                    "x": 6753,
+                    "y": 3525
+                },
+                "sensitivity": 3,
+                "sensitivity_y": 3,
+                "sensitivityex_x": 0.5,
+                "sensitivityex_y": 0.5,
+                "description": "",
+                "moreDescription": "",
+                "extraData": "",
+                "hintVisible": true,
+                "hintOffset": {
+                    "x": 0,
+                    "y": 0
+                }
+            }
+        },
+        {
+            "class": "ClassKeyboardCurve",
+            "data": {
+                "key": 69,
+                "secondKey": 0,
+                "curve": [
+                    {
+                        "x": 7067,
+                        "y": 8727,
+                        "timing": 0
+                    },
+                    {
+                        "x": 7067,
+                        "y": 8727,
+                        "timing": 101
+                    }
+                ],
+                "extraData": "",
+                "description": "",
+                "moreDescription": "",
+                "hintVisible": true,
+                "hintOffset": {
+                    "x": 0,
+                    "y": 0
+                }
+            }
+        },
+        {
+            "class": "ClassKeyboardCurve",
+            "data": {
+                "key": 89,
+                "secondKey": 0,
+                "curve": [
+                    {
+                        "x": 618,
+                        "y": 5518,
+                        "timing": 0
+                    },
+                    {
+                        "x": 618,
+                        "y": 5518,
+                        "timing": 70
+                    }
+                ],
+                "extraData": "",
+                "description": "",
+                "moreDescription": "",
+                "hintVisible": true,
+                "hintOffset": {
+                    "x": 0,
+                    "y": 0
+                }
+            }
+        },
+        {
+            "class": "ClassKeyboardCurve",
+            "data": {
+                "key": 86,
+                "secondKey": 0,
+                "curve": [
+                    {
+                        "x": 7396,
+                        "y": 6467,
+                        "timing": 0
+                    },
+                    {
+                        "x": 7396,
+                        "y": 6467,
+                        "timing": 95
+                    }
+                ],
+                "extraData": "",
+                "description": "",
+                "moreDescription": "",
+                "hintVisible": true,
+                "hintOffset": {
+                    "x": 0,
+                    "y": 0
+                }
+            }
+        },
+        {
+            "class": "ClassKeyboardCurve",
+            "data": {
+                "key": 81,
+                "secondKey": 0,
+                "curve": [
+                    {
+                        "x": 8323,
+                        "y": 6916,
+                        "timing": 0
+                    },
+                    {
+                        "x": 8323,
+                        "y": 6916,
+                        "timing": 85
+                    }
+                ],
+                "extraData": "",
+                "description": "",
+                "moreDescription": "",
+                "hintVisible": true,
+                "hintOffset": {
+                    "x": 0,
+                    "y": 0
+                }
+            }
+        },
+        {
+            "class": "ClassKeyboardCurve",
+            "data": {
+                "key": 88,
+                "secondKey": 0,
+                "curve": [
+                    {
+                        "x": 1516,
+                        "y": 5169,
+                        "timing": 0
+                    },
+                    {
+                        "x": 1516,
+                        "y": 5169,
+                        "timing": 110
+                    }
+                ],
+                "extraData": "",
+                "description": "",
+                "moreDescription": "",
+                "hintVisible": true,
+                "hintOffset": {
+                    "x": 0,
+                    "y": 0
+                }
+            }
+        },
+        {
+            "class": "ClassKeyboardCurve",
+            "data": {
+                "key": 72,
+                "secondKey": 0,
+                "curve": [
+                    {
+                        "x": 8344,
+                        "y": 3733,
+                        "timing": 0
+                    },
+                    {
+                        "x": 8344,
+                        "y": 3733,
+                        "timing": 64
+                    }
+                ],
+                "extraData": "",
+                "description": "",
+                "moreDescription": "",
+                "hintVisible": true,
+                "hintOffset": {
+                    "x": 0,
+                    "y": 0
+                }
+            }
+        },
+        {
+            "class": "ClassKeyboardCurve",
+            "data": {
+                "key": 90,
+                "secondKey": 0,
+                "curve": [
+                    {
+                        "x": 9053,
+                        "y": 3770,
+                        "timing": 0
+                    },
+                    {
+                        "x": 9053,
+                        "y": 3770,
+                        "timing": 87
+                    }
+                ],
+                "extraData": "",
+                "description": "",
+                "moreDescription": "",
+                "hintVisible": true,
+                "hintOffset": {
+                    "x": 0,
+                    "y": 0
+                }
+            }
+        },
+        {
+            "class": "ClassKeyboardMacros",
+            "data": {
+                "key": 32,
+                "secondKey": 0,
+                "origin": {
+                    "x": 9286,
+                    "y": 8713
+                },
+                "macros": "size 1920 1080\rtouch 1785 947\rwait 50\rtouch 1785 947",
+                "description": "",
+                "moreDescription": "",
+                "extraData": "",
+                "hintVisible": true,
+                "hintOffset": {
+                    "x": 0,
+                    "y": 0
+                }
+            }
+        },
+        {
+            "class": "ClassKeyboardCurve",
+            "data": {
+                "key": 16,
+                "secondKey": 0,
+                "curve": [
+                    {
+                        "x": 9255,
+                        "y": 9111,
+                        "timing": 0
+                    },
+                    {
+                        "x": 9250,
+                        "y": 9102,
+                        "timing": 38
+                    },
+                    {
+                        "x": 9250,
+                        "y": 9102,
+                        "timing": 56
+                    }
+                ],
+                "extraData": "",
+                "description": "",
+                "moreDescription": "",
+                "hintVisible": true,
+                "hintOffset": {
+                    "x": 0,
+                    "y": 0
+                }
+            }
+        },
+        {
+            "class": "ClassKeyboardCurve",
+            "data": {
+                "key": 70,
+                "secondKey": 0,
+                "curve": [
+                    {
+                        "x": 9453,
+                        "y": 5602,
+                        "timing": 0
+                    },
+                    {
+                        "x": 9453,
+                        "y": 5602,
+                        "timing": 64
+                    }
+                ],
+                "extraData": "",
+                "description": "",
+                "moreDescription": "",
+                "hintVisible": true,
+                "hintOffset": {
+                    "x": 0,
+                    "y": 0
+                }
+            }
+        },
+        {
+            "class": "ClassKeyboardCurve",
+            "data": {
+                "key": 82,
+                "secondKey": 0,
+                "curve": [
+                    {
+                        "x": 8198,
+                        "y": 4981,
+                        "timing": 0
+                    },
+                    {
+                        "x": 8198,
+                        "y": 4981,
+                        "timing": 78
+                    }
+                ],
+                "extraData": "",
+                "description": "",
+                "moreDescription": "",
+                "hintVisible": true,
+                "hintOffset": {
+                    "x": 0,
+                    "y": 0
+                }
+            }
+        }
+    ],
+    "configInfo": {
+        "version": 0,
+        "versionMessage": "",
+        "packageNameType": 1,
+        "packageNamePattern": "com.br.top|com.launcher.brgame",
+        "resolutionType": 1,
+        "resolutionPattern": {
+            "width": 1280,
+            "height": 720
+        },
+        "priority": 0,
+        "search": ""
+    },
+    "keyboardConfig": {
+        "mouseCenter": {
+            "x": 5000,
+            "y": 5000
+        },
+        "mouseScrollType": 0,
+        "discType": 0,
+        "advertising": true,
+        "advertiseDuration": 5000,
+        "advertiseText": "",
+        "cancelPoint": {
+            "x": 0,
+            "y": 0
+        },
+        "cancelKey": 0,
+        "cancelMode": 0,
+        "cursor": "lolCursor",
+        "extraData": ""
+    }
+}

@@ -1,0 +1,26 @@
+{
+  "ldplayer": {
+    "install_path": "",
+    "preferred_version": null,
+    "auto_detect": true
+  },
+  "monitor": {
+    "poll_interval_ms": 333,
+    "debounce_count": 1,
+    "show_debug_window": false,
+    "match_threshold": 0.75,
+    "save_debug_screenshot": false,
+    "none_state_switch": false
+  },
+  "gui": {
+    "start_minimized": false,
+    "show_toast": true,
+    "toast_duration_ms": 3000,
+    "language": ""
+  },
+  "advanced": {
+    "injector_path_override": null,
+    "dll_path_override": null,
+    "log_level": "INFO"
+  }
+}

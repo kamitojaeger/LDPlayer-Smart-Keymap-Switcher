@@ -1,0 +1,20 @@
+# LDPlayer Auto Input Switcher — Python 依赖
+# =============================================
+# 安装: pip install -r requirements.txt
+
+# 图像处理
+pillow
+numpy
+opencv-python-headless
+
+# 屏幕截图
+dxcam
+
+# Windows API
+pywin32
+
+# GUI 框架 (Phase 4)
+PySide6
+
+# 打包工具 (Phase 5)
+pyinstaller

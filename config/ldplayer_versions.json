@@ -1,0 +1,35 @@
+{
+  "supported_versions": [
+    {
+      "id": "ld9_overseas",
+      "name": "LDPlayer 9",
+      "process_name": "dnplayer.exe",
+      "dll_name": "dnplycore.dll",
+      "offsets": {
+        "hook_rva": 131484,
+        "func_rva": 641552,
+        "return_rva": 131489
+      },
+      "detection": {
+        "dll_size": null,
+        "signature": "55 8B EC 83 E4 F8 81 EC"
+      }
+    },
+    {
+      "id": "ld14_overseas",
+      "name": "LDPlayer 14",
+      "process_name": "dnplayer.exe",
+      "dll_name": "dnplycore.dll",
+      "offsets": {
+        "hook_rva": 121427,
+        "func_rva": 614704,
+        "return_rva": 121432
+      },
+      "detection": {
+        "dll_size": null,
+        "signature": "55 8B EC 83 E4 F8 81 EC"
+      }
+    }
+  ],
+  "fallback_strategy": "prompt_user"
+}

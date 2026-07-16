@@ -1,0 +1,7 @@
+# v9 更新: 截图方案从 dxcam 改为 LDPlayer 内置截图（Ctrl+0）
+# dxcam 和 pywin32 不再需要用于截图，但保留供参考
+# dxcam          # 旧版依赖（v8 及之前）
+# pywin32        # 旧版依赖（v8 及之前）
+pillow
+numpy
+opencv-python-headless

@@ -1,0 +1,83 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+*.egg
+.eggs/
+dist_package/
+build_temp/
+*.spec
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# IDE / Editor
+.workbuddy/
+.cowork-temp/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Debugger (x32dbg, 82MB)
+x64-x32dbg/
+
+# Debug artifacts
+Screenshot_*.png
+*_debug.png
+testScreenShots/
+scan_result_6_check/
+test_debug_*.png
+walkSample_*.png
+
+# Reverse engineering trace files
+x32dbg_*.txt
+call-stack-full-table-01.txt
+find_setKeyboardConfig.txt
+step2_disasm_context.txt
+tmp_matcher_header.txt
+memoryMapOutput.txt
+
+# Intermediate scan results
+scripts/scan_result_*/
+
+# Build artifacts (all directories; explicit exceptions for dist/)
+*.dll
+*.exe
+*.obj
+*.exp
+*.lib
+*.res
+*.bin
+!dist/*.dll
+!dist/*.exe
+
+# Build logs
+build_log.txt
+hook_demo/build_log.txt
+
+# Test KMP files in hook_demo
+hook_demo/*.kmp
+hook_demo/**/*.kmp
+hook_demo/test/
+
+# Duplicate game data (canonical copy is games/)
+scripts/games/
+
+# External binaries (users should download separately)
+adb.exe
+
+# User runtime config (track template instead)
+config/settings.json
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Logs
+*.log

@@ -1,0 +1,64 @@
+{
+  "name": "GTA: San Andreas",
+  "package": "com.rockstargames.gtasa",
+  "description": "Grand Theft Auto: San Andreas — 需要自动切换行走/驾驶按键方案",
+  "author": "LDPlayer Auto Input Switcher Team",
+  "version": "1.0",
+  "schema_version": 2,
+
+  "resolution": {
+    "width": 1920,
+    "height": 1080
+  },
+
+  "detection": {
+    "method": "template_matching",
+    "interval_ms": 500,
+    "threshold": 0.75,
+    "feature_mask": {
+      "enabled": true,
+      "dark_percentile": 22,
+      "bright_percentile": 82
+    }
+  },
+
+  "regions": {
+    "default": {
+      "method": "bottom_right",
+      "search_expand": 16,
+      "margin_bottom": 40,
+      "margin_right": 40,
+      "slack": 20
+    }
+  },
+
+  "states": [
+    {
+      "id": "walk",
+      "name": "行走模式",
+      "description": "步行 / 跑步状态",
+      "keymap": "keymaps/GTASA(walk mode).kmp",
+      "mouse_drag_key": null,
+      "templates": [
+        { "path": "templates/walk.png", "region": "default" }
+      ],
+      "match_logic": "any"
+    },
+    {
+      "id": "drive",
+      "name": "驾驶模式",
+      "description": "驾车 / 飞行状态，需要射击视角",
+      "keymap": "keymaps/GTASA(Drive mode).kmp",
+      "mouse_drag_key": 17,
+      "templates": [
+        { "path": "templates/drive.png", "region": "default" }
+      ],
+      "match_logic": "any"
+    }
+  ],
+
+  "none_state": {
+    "keymap": "keymaps/GTASA(walk mode).kmp",
+    "mouse_drag_key": null
+  }
+}

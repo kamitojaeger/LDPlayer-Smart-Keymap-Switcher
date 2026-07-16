@@ -1,0 +1,450 @@
+{
+  "name": "Call of Duty: Mobile",
+  "package": [
+    "com.activision.callofduty.shooter",
+    "com.garena.game.codm"
+  ],
+  "description": "Call of Duty: Mobile — BR 模式智能按键切换",
+  "author": "LDPlayer Auto Input Switcher Team",
+  "version": "1.0",
+  "schema_version": 2,
+  "resolution": {
+    "width": 1920,
+    "height": 1080
+  },
+  "detection": {
+    "method": "template_matching",
+    "interval_ms": 500,
+    "threshold": 0.75,
+    "feature_mask": {
+      "enabled": true,
+      "dark_percentile": 22,
+      "bright_percentile": 82
+    }
+  },
+  "regions": {
+    "br_jump": {
+      "x": 1770,
+      "y": 700,
+      "width": 110,
+      "height": 110,
+      "search_expand": 16
+    },
+    "br_sneak": {
+      "x": 1585,
+      "y": 950,
+      "width": 80,
+      "height": 80,
+      "search_expand": 16
+    },
+    "br_swim_up": {
+      "x": 1770,
+      "y": 700,
+      "width": 110,
+      "height": 110,
+      "search_expand": 16
+    },
+    "br_swim_down": {
+      "x": 1585,
+      "y": 950,
+      "width": 80,
+      "height": 80,
+      "search_expand": 16
+    },
+    "tr_flying": {
+      "x": 1255,
+      "y": 200,
+      "width": 50,
+      "height": 650,
+      "search_expand": 16
+    },
+    "bl_machinegun": {
+      "x": 832,
+      "y": 892,
+      "width": 256,
+      "height": 81,
+      "search_expand": 16
+    },
+    "tr_leave_vehicle": {
+      "x": 1771,
+      "y": 316,
+      "width": 108,
+      "height": 108,
+      "search_expand": 16
+    },
+    "bl_arrow_down": {
+      "x": 235,
+      "y": 734,
+      "width": 170,
+      "height": 171,
+      "search_expand": 16
+    },
+    "tl_arrow_up": {
+      "x": 235,
+      "y": 482,
+      "width": 170,
+      "height": 171,
+      "search_expand": 16
+    },
+    "br_arrow_right": {
+      "x": 1578,
+      "y": 662,
+      "width": 180,
+      "height": 171,
+      "search_expand": 16
+    },
+    "br_arrow_left": {
+      "x": 1308,
+      "y": 662,
+      "width": 180,
+      "height": 171,
+      "search_expand": 16
+    },
+    "br_arrow_right_tank": {
+      "x": 1362,
+      "y": 615,
+      "width": 171,
+      "height": 171,
+      "search_expand": 16
+    },
+    "br_arrow_left_tank": {
+      "x": 1133,
+      "y": 615,
+      "width": 171,
+      "height": 171,
+      "search_expand": 16
+    },
+    "br_accelerate": {
+      "x": 1530,
+      "y": 705,
+      "width": 188,
+      "height": 188,
+      "search_expand": 16
+    },
+    "br_car_horn": {
+      "x": 1790,
+      "y": 710,
+      "width": 116,
+      "height": 116,
+      "search_expand": 16
+    },
+    "tr_heli_controls": {
+      "x": 1405,
+      "y": 503,
+      "width": 170,
+      "height": 464,
+      "search_expand": 16
+    },
+    "br_jet_crosshair": {
+      "x": 1239,
+      "y": 640,
+      "width": 138,
+      "height": 138,
+      "search_expand": 16
+    },
+    "br_tank_smoke": {
+      "x": 1756,
+      "y": 646,
+      "width": 100,
+      "height": 100,
+      "search_expand": 16
+    },
+    "heli_up": {
+      "x": 1400,
+      "y": 500,
+      "width": 180,
+      "height": 180,
+      "search_expand": 6
+    },
+    "heli_down": {
+      "x": 1400,
+      "y": 790,
+      "width": 180,
+      "height": 180,
+      "search_expand": 6
+    }
+  },
+  "states": [
+    {
+      "id": "walk",
+      "name": "走路",
+      "description": "步行/跑步状态 — jump + sneak 按钮可见",
+      "keymap": "keymaps/CODM((walk).kmp",
+      "mouse_drag_key": null,
+      "priority": 0,
+      "templates": [
+        {
+          "path": "templates/walk+swim+flying/jump.png",
+          "region": "br_jump",
+          "matching_mode": "pixel"
+        },
+        {
+          "path": "templates/walk+swim+flying/sneak.png",
+          "region": "br_sneak",
+          "matching_mode": "pixel"
+        }
+      ],
+      "match_logic": "all"
+    },
+    {
+      "id": "swim",
+      "name": "游泳",
+      "description": "游泳状态 — swim_up + swim_down 按钮可见",
+      "keymap": "keymaps/CODM((walk).kmp",
+      "mouse_drag_key": null,
+      "priority": 0,
+      "templates": [
+        {
+          "path": "templates/walk+swim+flying/swim_up.png",
+          "region": "br_swim_up",
+          "matching_mode": "pixel"
+        },
+        {
+          "path": "templates/walk+swim+flying/swim_down.png",
+          "region": "br_swim_down",
+          "matching_mode": "pixel"
+        }
+      ],
+      "match_logic": "all"
+    },
+    {
+      "id": "glide",
+      "name": "滑翔",
+      "description": "跳伞/滑翔状态 — Flying 指示器可见",
+      "keymap": "keymaps/CODM((walk).kmp",
+      "mouse_drag_key": null,
+      "priority": 0,
+      "templates": [
+        {
+          "path": "templates/walk+swim+flying/Flying.png",
+          "region": "tr_flying",
+          "matching_mode": "pixel"
+        }
+      ],
+      "match_logic": "any"
+    },
+    {
+      "id": "vehicle_mg_tank",
+      "name": "控制坦克机枪",
+      "description": "在坦克炮手位 — tank_machineGun 准星可见",
+      "keymap": "keymaps/CODM((walk).kmp",
+      "mouse_drag_key": 17,
+      "priority": 8,
+      "templates": [
+        {
+          "path": "templates/vehicle/tank_machineGun.png",
+          "region": "bl_machinegun",
+          "matching_mode": "pixel"
+        }
+      ],
+      "match_logic": "any"
+    },
+    {
+      "id": "vehicle_mg_car",
+      "name": "控制车载机枪",
+      "description": "在车载机枪位 — machinegun 准星可见",
+      "keymap": "keymaps/CODM((walk).kmp",
+      "mouse_drag_key": 17,
+      "priority": 8,
+      "templates": [
+        {
+          "path": "templates/vehicle/machinegun.png",
+          "region": "bl_machinegun",
+          "matching_mode": "pixel"
+        }
+      ],
+      "match_logic": "any"
+    },
+    {
+      "id": "vehicle_passenger",
+      "name": "搭乘载具",
+      "description": "载具乘客/副驾 — leaveVehicle 按钮可见，无驾驶控件",
+      "keymap": "keymaps/CODM((walk).kmp",
+      "mouse_drag_key": null,
+      "priority": 4,
+      "templates": [
+        {
+          "path": "templates/vehicle/leaveVehicle.png",
+          "region": "tr_leave_vehicle",
+          "matching_mode": "pixel"
+        }
+      ],
+      "match_logic": "any",
+      "negative_templates": [
+        {
+          "path": "templates/vehicle/Drive_carHorn.png",
+          "region": "br_car_horn"
+        },
+        {
+          "path": "templates/vehicle/tank_smoke_ingame.png",
+          "region": "br_tank_smoke"
+        },
+        {
+          "path": "templates/vehicle/heli_up.png",
+          "region": "heli_up"
+        },
+        {
+          "path": "templates/vehicle/heli_down.png",
+          "region": "heli_down"
+        },
+        {
+          "path": "templates/vehicle/Drive_2_jet_accelerate.png",
+          "region": "br_accelerate"
+        }
+      ],
+      "negative_penalty": 0.5
+    },
+    {
+      "id": "vehicle_drive_1",
+      "name": "开车方案1",
+      "description": "驾驶地面载具 — 四向方向键布局",
+      "keymap": "keymaps/CODM((car_drive_1).kmp",
+      "mouse_drag_key": 17,
+      "priority": 12,
+      "templates": [
+        {
+          "path": "templates/vehicle/Drive_1_downArrow.png",
+          "region": "bl_arrow_down",
+          "matching_mode": "pixel"
+        },
+        {
+          "path": "templates/vehicle/Drive_1_leftArrow.png",
+          "region": "br_arrow_left",
+          "matching_mode": "pixel"
+        },
+        {
+          "path": "templates/vehicle/Drive_1_rightArrow.png",
+          "region": "br_arrow_right",
+          "matching_mode": "pixel"
+        },
+        {
+          "path": "templates/vehicle/Drive_carHorn.png",
+          "region": "br_car_horn",
+          "matching_mode": "pixel"
+        },
+        {
+          "path": "templates/vehicle/Drive_1_upArrow.png",
+          "region": "tl_arrow_up",
+          "matching_mode": "pixel"
+        }
+      ],
+      "match_logic": "all",
+      "min_pass_ratio": 0.6
+    },
+    {
+      "id": "vehicle_drive_2",
+      "name": "开车方案2",
+      "description": "驾驶特殊载具 — jet accelerate HUD + 喇叭按钮可见",
+      "keymap": "keymaps/CODM((car_drive_2).kmp",
+      "mouse_drag_key": 17,
+      "priority": 12,
+      "templates": [
+        {
+          "path": "templates/vehicle/Drive_2_jet_accelerate.png",
+          "region": "br_accelerate",
+          "matching_mode": "pixel"
+        },
+        {
+          "path": "templates/vehicle/Drive_carHorn.png",
+          "region": "br_car_horn",
+          "matching_mode": "pixel"
+        }
+      ],
+      "match_logic": "all"
+    },
+    {
+      "id": "vehicle_heli",
+      "name": "驾驶直升机",
+      "description": "驾驶直升机 — 升降控制HUD可见",
+      "keymap": "keymaps/CODM((heli).kmp",
+      "mouse_drag_key": 17,
+      "priority": 12,
+      "templates": [
+        {
+          "path": "templates/vehicle/heli_up.png",
+          "region": "heli_up",
+          "matching_mode": "pixel"
+        },
+        {
+          "path": "templates/vehicle/heli_down.png",
+          "region": "heli_down",
+          "matching_mode": "pixel"
+        }
+      ],
+      "match_logic": "any"
+    },
+    {
+      "id": "vehicle_jet",
+      "name": "驾驶固定翼",
+      "description": "驾驶固定翼飞机 — 机炮准星可见",
+      "keymap": "keymaps/CODM((jet).kmp",
+      "mouse_drag_key": 17,
+      "priority": 12,
+      "templates": [
+        {
+          "path": "templates/vehicle/jet_machineGun.png",
+          "region": "br_jet_crosshair",
+          "matching_mode": "pixel"
+        }
+      ],
+      "match_logic": "any"
+    },
+    {
+      "id": "tank_drive_1",
+      "name": "驾驶坦克1",
+      "description": "驾驶坦克（有方向键）— tank_smoke + 四向方向键同时可见",
+      "keymap": "keymaps/CODM(tank_drive_1).kmp",
+      "mouse_drag_key": 17,
+      "priority": 16,
+      "templates": [
+        {
+          "path": "templates/vehicle/tank_smoke_ingame.png",
+          "region": "br_tank_smoke",
+          "matching_mode": "pixel"
+        },
+        {
+          "path": "templates/vehicle/Drive_1_downArrow.png",
+          "region": "bl_arrow_down",
+          "matching_mode": "pixel"
+        },
+        {
+          "path": "templates/vehicle/Drive_1_leftArrow_tank.png",
+          "region": "br_arrow_left_tank",
+          "matching_mode": "pixel"
+        },
+        {
+          "path": "templates/vehicle/Drive_1_rightArrow_tank.png",
+          "region": "br_arrow_right_tank",
+          "matching_mode": "pixel"
+        },
+        {
+          "path": "templates/vehicle/Drive_1_upArrow.png",
+          "region": "tl_arrow_up",
+          "matching_mode": "pixel"
+        }
+      ],
+      "match_logic": "all",
+      "min_pass_ratio": 0.75
+    },
+    {
+      "id": "tank_drive_2",
+      "name": "驾驶坦克2",
+      "description": "驾驶坦克（无方向键）— 仅 tank_smoke 指示器可见",
+      "keymap": "keymaps/CODM((tank_drive_2).kmp",
+      "mouse_drag_key": 17,
+      "priority": 8,
+      "templates": [
+        {
+          "path": "templates/vehicle/tank_smoke_ingame.png",
+          "region": "br_tank_smoke",
+          "matching_mode": "pixel"
+        }
+      ],
+      "match_logic": "any"
+    }
+  ],
+  "none_state": {
+    "keymap": "keymaps/CODM((walk).kmp",
+    "mouse_drag_key": null
+  }
+}
