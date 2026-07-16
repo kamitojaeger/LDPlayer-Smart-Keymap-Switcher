@@ -77,7 +77,6 @@ REVERSE_ENGINEERING_REPORT.md
 docs/KEYMAP_COUNT_DECEPTION_PLAN.md
 docs/MEMORY_KEYMAP_DEV_PLAN.md
 docs/REVERSE_ENGINEERING.md
-games/CODM/codm吃鸡模式智能按键需求.txt
 
 # User runtime config (track template instead)
 config/settings.json
