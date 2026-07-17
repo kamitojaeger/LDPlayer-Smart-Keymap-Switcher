@@ -1,29 +1,6 @@
 {
     "keyboardMappings": [
         {
-            "class": "ClassMouseDrag",
-            "data": {
-                "key": 17,
-                "mode": 0,
-                "origin": {
-                    "x": 7119,
-                    "y": 4611
-                },
-                "sensitivity": 3,
-                "sensitivity_y": 3,
-                "sensitivityex_x": 0.46,
-                "sensitivityex_y": 0.46,
-                "description": "",
-                "moreDescription": "",
-                "extraData": "",
-                "hintVisible": true,
-                "hintOffset": {
-                    "x": 0,
-                    "y": 0
-                }
-            }
-        },
-        {
             "class": "ClassKeyboardCurve",
             "data": {
                 "key": 49,
@@ -887,6 +864,29 @@
                 "extraData": "",
                 "description": "",
                 "moreDescription": "",
+                "hintVisible": true,
+                "hintOffset": {
+                    "x": 0,
+                    "y": 0
+                }
+            }
+        },
+        {
+            "class": "ClassMouseDrag",
+            "data": {
+                "key": 17,
+                "mode": 0,
+                "origin": {
+                    "x": 5650,
+                    "y": 1561
+                },
+                "sensitivity": 3,
+                "sensitivity_y": 3,
+                "sensitivityex_x": 0.46,
+                "sensitivityex_y": 0.46,
+                "description": "",
+                "moreDescription": "",
+                "extraData": "autorelease",
                 "hintVisible": true,
                 "hintOffset": {
                     "x": 0,

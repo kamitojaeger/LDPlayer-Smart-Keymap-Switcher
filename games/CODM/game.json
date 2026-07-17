@@ -169,7 +169,7 @@
       "id": "walk",
       "name": "走路",
       "description": "步行/跑步状态 — jump + sneak 按钮可见",
-      "keymap": "keymaps/CODM((walk).kmp",
+      "keymap": "keymaps/CODM(walk).kmp",
       "mouse_drag_key": null,
       "priority": 0,
       "templates": [
@@ -190,7 +190,7 @@
       "id": "swim",
       "name": "游泳",
       "description": "游泳状态 — swim_up + swim_down 按钮可见",
-      "keymap": "keymaps/CODM((walk).kmp",
+      "keymap": "keymaps/CODM(walk).kmp",
       "mouse_drag_key": null,
       "priority": 0,
       "templates": [
@@ -211,7 +211,7 @@
       "id": "glide",
       "name": "滑翔",
       "description": "跳伞/滑翔状态 — Flying 指示器可见",
-      "keymap": "keymaps/CODM((walk).kmp",
+      "keymap": "keymaps/CODM(walk).kmp",
       "mouse_drag_key": null,
       "priority": 0,
       "templates": [
@@ -227,7 +227,7 @@
       "id": "vehicle_mg_tank",
       "name": "控制坦克机枪",
       "description": "在坦克炮手位 — tank_machineGun 准星可见",
-      "keymap": "keymaps/CODM((walk).kmp",
+      "keymap": "keymaps/CODM(walk).kmp",
       "mouse_drag_key": 17,
       "priority": 8,
       "templates": [
@@ -243,7 +243,7 @@
       "id": "vehicle_mg_car",
       "name": "控制车载机枪",
       "description": "在车载机枪位 — machinegun 准星可见",
-      "keymap": "keymaps/CODM((walk).kmp",
+      "keymap": "keymaps/CODM(walk).kmp",
       "mouse_drag_key": 17,
       "priority": 8,
       "templates": [
@@ -259,7 +259,7 @@
       "id": "vehicle_passenger",
       "name": "搭乘载具",
       "description": "载具乘客/副驾 — leaveVehicle 按钮可见，无驾驶控件",
-      "keymap": "keymaps/CODM((walk).kmp",
+      "keymap": "keymaps/CODM(walk).kmp",
       "mouse_drag_key": null,
       "priority": 4,
       "templates": [
@@ -298,7 +298,7 @@
       "id": "vehicle_drive_1",
       "name": "开车方案1",
       "description": "驾驶地面载具 — 四向方向键布局",
-      "keymap": "keymaps/CODM((car_drive_1).kmp",
+      "keymap": "keymaps/CODM(car_drive_1).kmp",
       "mouse_drag_key": 17,
       "priority": 12,
       "templates": [
@@ -335,7 +335,7 @@
       "id": "vehicle_drive_2",
       "name": "开车方案2",
       "description": "驾驶特殊载具 — jet accelerate HUD + 喇叭按钮可见",
-      "keymap": "keymaps/CODM((car_drive_2).kmp",
+      "keymap": "keymaps/CODM(car_drive_2).kmp",
       "mouse_drag_key": 17,
       "priority": 12,
       "templates": [
@@ -356,7 +356,7 @@
       "id": "vehicle_heli",
       "name": "驾驶直升机",
       "description": "驾驶直升机 — 升降控制HUD可见",
-      "keymap": "keymaps/CODM((heli).kmp",
+      "keymap": "keymaps/CODM(heli).kmp",
       "mouse_drag_key": 17,
       "priority": 12,
       "templates": [
@@ -377,7 +377,7 @@
       "id": "vehicle_jet",
       "name": "驾驶固定翼",
       "description": "驾驶固定翼飞机 — 机炮准星可见",
-      "keymap": "keymaps/CODM((jet).kmp",
+      "keymap": "keymaps/CODM(jet).kmp",
       "mouse_drag_key": 17,
       "priority": 12,
       "templates": [
@@ -387,7 +387,18 @@
           "matching_mode": "pixel"
         }
       ],
-      "match_logic": "any"
+      "match_logic": "any",
+"negative_templates": [
+        {
+          "path": "templates/vehicle/Drive_carHorn.png",
+          "region": "br_car_horn"
+        },
+        {
+          "path": "templates/walk+swim+flying/jump.png",
+          "region": "br_jump"
+        }
+      ],
+      "negative_penalty": 0.5
     },
     {
       "id": "tank_drive_1",
@@ -430,7 +441,7 @@
       "id": "tank_drive_2",
       "name": "驾驶坦克2",
       "description": "驾驶坦克（无方向键）— 仅 tank_smoke 指示器可见",
-      "keymap": "keymaps/CODM((tank_drive_2).kmp",
+      "keymap": "keymaps/CODM(tank_drive_2).kmp",
       "mouse_drag_key": 17,
       "priority": 8,
       "templates": [
@@ -444,7 +455,7 @@
     }
   ],
   "none_state": {
-    "keymap": "keymaps/CODM((walk).kmp",
+    "keymap": "keymaps/CODM(Empty Keymap).kmp",
     "mouse_drag_key": null
   }
 }

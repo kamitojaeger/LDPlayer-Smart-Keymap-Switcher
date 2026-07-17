@@ -1,0 +1,35 @@
+{
+    "keyboardMappings": [],
+    "configInfo": {
+        "version": 0,
+        "versionMessage": "",
+        "packageNameType": 1,
+        "packageNamePattern": "com.activision.callofduty.shooter|com.tencent.tmgp.kr.codm|com.garena.game.codm|com.android.gallery3d",
+        "resolutionType": 1,
+        "resolutionPattern": {
+            "width": 1600,
+            "height": 900
+        },
+        "priority": 0,
+        "search": ""
+    },
+    "keyboardConfig": {
+        "mouseCenter": {
+            "x": 5000,
+            "y": 5000
+        },
+        "mouseScrollType": 2,
+        "discType": 0,
+        "advertising": true,
+        "advertiseDuration": 5000,
+        "advertiseText": "",
+        "cancelPoint": {
+            "x": 0,
+            "y": 0
+        },
+        "cancelKey": 0,
+        "cancelMode": 0,
+        "cursor": "lolCursor",
+        "extraData": ""
+    }
+}

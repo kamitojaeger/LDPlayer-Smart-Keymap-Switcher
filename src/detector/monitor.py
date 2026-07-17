@@ -36,6 +36,8 @@ from .matcher import (
 from .state_machine import StateMachine, STATE_NONE
 from .overlay import show_toast, extract_key_name, update_toast, destroy_toast
 
+import ctypes
+
 
 # ---- 默认输出目录 ----
 def _get_default_output_dir():
@@ -302,18 +304,24 @@ try:
                             f"[Switch] {old_state} → {new_state}"
                         )
 
-                        # 使用 Injector 执行切换
-                        if injector.switch(kmp):
-                            _last_loaded_kmp = kmp  # 记录已加载的 .kmp
+                        # 解析旧 .kmp 的方向盘左键（用于切换后重置 LDPlayer 方向状态）
+                        disc_left_key = None
+                        old_kmp = _last_loaded_kmp
+                        if old_kmp and os.path.exists(old_kmp):
+                            disc_left_key = injector.parse_kmp_disc_left_key(old_kmp)
 
+                        # 切换前释放所有按下的按键
+                        injector.release_held_keys()
+
+                        # 执行切换
+                        if injector.switch(kmp):
+                            _last_loaded_kmp = kmp
                             self.status_changed.emit(old_state, new_state)
 
-                            # Toast
                             if self._show_toast and self._parent_hwnd is not None:
                                 key_name = extract_key_name(kmp)
                                 show_toast(key_name, self._parent_hwnd)
 
-                            # Toast 之后重新确保 LDPlayer 持有焦点
                             if self._parent_hwnd is not None:
                                 try:
                                     import win32gui as _w32g
@@ -321,6 +329,10 @@ try:
                                 except Exception:
                                     pass
 
+                            # 切换后再释放一次按键
+                            injector.release_held_keys()
+
+                            # Mouse drag key
                             if mouse_key is None:
                                 mouse_key = injector.parse_kmp_mouse_drag_key(kmp)
                             if mouse_key is not None:
@@ -328,8 +340,19 @@ try:
                                 self.log_message.emit(
                                     f"[MouseDrag] sent VK={mouse_key}"
                                 )
+
+                            # 方向盘左键 tap — 重置 LDPlayer 方向状态机（MouseDrag 之后）
+                            if disc_left_key is not None:
+                                key_name = chr(disc_left_key) if 0x20 <= disc_left_key < 0x7F else "?"
+                                user32 = ctypes.windll.user32
+                                user32.keybd_event(disc_left_key, 0, 0, 0)
+                                import time as _disc_time
+                                _disc_time.sleep(0.005)  # 5ms 确保 LDPlayer 能区分按下/抬起
+                                user32.keybd_event(disc_left_key, 0, 2, 0)
+                                self.log_message.emit(
+                                    f"[DiscReset] tapped left key '{key_name}' vk={disc_left_key}"
+                                )
                         else:
-                            # 切换失败 → 回滚状态机，下次帧继续尝试
                             self.log_message.emit(
                                 f"[Failed] injector.switch() returned False, rolling back"
                             )
@@ -486,6 +509,8 @@ def run_monitor_loop(config: MonitorConfig,
                 if kmp and kmp == last_loaded_kmp:
                     switch_info = f" [Skip] keymap unchanged, already at {new_state}"
                 elif os.path.exists(kmp):
+                    # 切换前释放所有按下的按键
+                    injector.release_held_keys()
                     # 使用 Injector 执行切换
                     if injector.switch(kmp):
                         last_loaded_kmp = kmp  # 记录已加载的 .kmp
@@ -504,6 +529,9 @@ def run_monitor_loop(config: MonitorConfig,
                                 _w32g2.SetForegroundWindow(parent_hwnd)
                             except Exception:
                                 pass
+
+                        # 切换后再释放一次（某些 UI 场景下 keybd_event 在切换后更有效）
+                        injector.release_held_keys()
 
                         # 发送 mouse drag key
                         mouse_key = state_cfg.get("mouse_drag_key")

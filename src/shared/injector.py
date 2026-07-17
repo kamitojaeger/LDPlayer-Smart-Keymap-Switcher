@@ -14,6 +14,8 @@ import json
 import ctypes
 import subprocess
 import sys
+import threading
+import time
 from typing import Optional
 
 # PyInstaller/Windows: 抑制 subprocess 弹出 CMD 窗口
@@ -119,6 +121,27 @@ class Injector:
             return None
 
     @staticmethod
+    def parse_kmp_disc_left_key(kmp_path: str) -> Optional[int]:
+        """解析 .kmp 中 ClassKeyboardDisc 的 leftKey。
+
+        ClassKeyboardDisc = LDPlayer 方向盘，只有含该 class 的 .kmp 切换时
+        才可能触发方向键残留 bug。取其 leftKey 在切换后 tap 一次释放状态。
+        返回虚拟键码，无 ClassKeyboardDisc 则返回 None。
+        """
+        try:
+            with open(kmp_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+        except Exception:
+            return None
+
+        for m in data.get('keyboardMappings', []):
+            if m.get('class') == 'ClassKeyboardDisc':
+                lk = m.get('data', {}).get('leftKey')
+                if lk is not None:
+                    return lk
+        return None
+
+    @staticmethod
     def parse_kmp_mouse_drag_key(kmp_path: str) -> Optional[int]:
         """解析 .kmp 文件中的 ClassMouseDrag key。
 
@@ -143,3 +166,134 @@ class Injector:
         user32 = ctypes.windll.user32
         user32.keybd_event(vk_code, 0, 0, 0)           # down
         user32.keybd_event(vk_code, 0, 2, 0)           # up (KEYEVENTF_KEYUP)
+
+    @staticmethod
+    def release_held_keys():
+        """扫描并释放所有当前按下的按键（keybd_event KEYUP）。
+
+        在键位方案切换前调用，防止切换后物理按住不放的按键残留。
+        全量扫描 VK 0x01~0xFE，耗时 ~100μs，不影响切换延迟。
+        """
+        user32 = ctypes.windll.user32
+        released = 0
+        for vk in range(0x01, 0xFF):
+            if user32.GetAsyncKeyState(vk) & 0x8000:
+                user32.keybd_event(vk, 0, 2, 0)  # KEYEVENTF_KEYUP
+                released += 1
+        return released
+
+
+class KeyboardBlocker:
+    """WH_KEYBOARD_LL 全局键盘拦截器。
+
+    在上下文管理器中暂时阻断所有键盘输入，退出时自动恢复。
+
+    用法:
+        blocker = KeyboardBlocker(timeout_ms=300)
+        with blocker:
+            # 此处所有键盘输入被拦截
+            injector.release_held_keys()
+            injector.switch(kmp)
+        # 退出 with 后键盘恢复正常
+
+    安全机制: deactivate() 在 __exit__ 中保证被调用；额外有 timeout_ms 硬超时。
+    """
+
+    WH_KEYBOARD_LL = 13
+    WM_KEYDOWN = 0x0100
+    WM_KEYUP   = 0x0101
+    WM_SYSKEYDOWN = 0x0104
+    WM_SYSKEYUP   = 0x0105
+
+    _HOOKPROC = ctypes.WINFUNCTYPE(ctypes.c_long, ctypes.c_int,
+                                    ctypes.c_void_p, ctypes.c_void_p)
+
+    def __init__(self, timeout_ms: int = 500):
+        self._timeout_ms = timeout_ms
+        self._hook_id = None
+        self._stop = threading.Event()
+        self._thread = None
+        self._user32 = ctypes.windll.user32
+        self._kernel32 = ctypes.windll.kernel32
+
+        # 必须持有回调引用，否则被 GC 后 crash
+        self._hook_cb = self._HOOKPROC(self._hook_proc)
+
+    # ── public API ──────────────────────────────────────────────
+
+    def __enter__(self):
+        self.activate()
+        return self
+
+    def __exit__(self, *args):
+        self.deactivate()
+        return False
+
+    def activate(self):
+        """安装键盘钩子，启动消息循环线程。"""
+        if self._hook_id is not None:
+            return
+        self._stop.clear()
+        self._thread = threading.Thread(
+            target=self._message_loop, daemon=True, name="KeyboardBlocker")
+        self._thread.start()
+        self._thread.join(timeout=1.0)  # 等钩子安装完成
+        if self._hook_id is None:
+            print("[KeyboardBlocker] WARNING: hook not installed after 1s — "
+                  "keyboard NOT blocked")
+
+    def deactivate(self):
+        """卸载钩子，停止线程。幂等，可重复调用。"""
+        if self._hook_id is None:
+            return
+        self._stop.set()
+        # 向消息队列发送一条消息，唤醒 GetMessage 等待
+        self._user32.PostThreadMessageW(
+            self._thread.ident, 0x0400, 0, 0)  # WM_USER
+        self._thread.join(timeout=2.0)
+        self._hook_id = None
+
+    @property
+    def is_active(self) -> bool:
+        return self._hook_id is not None
+
+    # ── 内部 ────────────────────────────────────────────────────
+
+    def _hook_proc(self, nCode, wParam, lParam):
+        """钩子回调——在拦截线程上下文中执行。"""
+        if nCode >= 0 and not self._stop.is_set():
+            return 1  # 吃掉消息
+        return self._user32.CallNextHookEx(
+            None, nCode, wParam, lParam)
+
+    def _message_loop(self):
+        """独立线程中的消息循环（WH_KEYBOARD_LL 必需）。"""
+        # hMod 必须为 NULL — Python 脚本的钩子过程在解释器内存中，不在 DLL
+        self._hook_id = self._user32.SetWindowsHookExW(
+            self.WH_KEYBOARD_LL, self._hook_cb, None, 0)
+
+        if self._hook_id == 0:
+            print("[KeyboardBlocker] SetWindowsHookExW failed")
+            return
+
+        # 硬超时：即使 _stop 未 set，也强制超时退出
+        deadline = time.time() + (self._timeout_ms / 1000.0)
+
+        class _MSG(ctypes.Structure):
+            _fields_ = [
+                ("hwnd", ctypes.c_void_p), ("message", ctypes.c_uint),
+                ("wParam", ctypes.c_void_p), ("lParam", ctypes.c_void_p),
+                ("time", ctypes.c_uint),
+                ("pt_x", ctypes.c_long), ("pt_y", ctypes.c_long),
+            ]
+
+        msg = _MSG()
+        while not self._stop.is_set() and time.time() < deadline:
+            ret = self._user32.GetMessageW(ctypes.byref(msg), None, 0, 0)
+            if ret in (0, -1):
+                break
+            self._user32.TranslateMessage(ctypes.byref(msg))
+            self._user32.DispatchMessageW(ctypes.byref(msg))
+
+        self._user32.UnhookWindowsHookEx(self._hook_id)
+        self._hook_id = None

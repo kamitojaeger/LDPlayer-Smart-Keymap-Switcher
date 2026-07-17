@@ -393,7 +393,7 @@ class AppSettings:
             "show_debug_window": False,
             "save_debug_screenshot": False,
             "none_state_enabled": True,
-            "none_state_frames": 20,
+            "none_state_frames": 200,
         },
         "gui": {
             "start_minimized": False,
@@ -450,8 +450,8 @@ class AppSettings:
 
     @property
     def none_state_frames(self) -> int:
-        """进入 none 状态所需的连续无匹配帧数。默认 20。"""
-        return self._data.get("monitor", {}).get("none_state_frames", 20)
+        """进入 none 状态所需的连续无匹配帧数。默认 200。"""
+        return self._data.get("monitor", {}).get("none_state_frames", 200)
 
     @property
     def show_debug_window(self) -> bool:
