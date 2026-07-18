@@ -400,7 +400,7 @@
         },
         {
           "path": "templates/walk+swim+flying/Flying.png",
-          "region": "tr_flying",
+          "region": "tr_flying"
         }
       ],
       "negative_penalty": 0.5

@@ -202,10 +202,14 @@ def run_gui(args):
 
     # ── 创建主窗口 ──
     window = MainWindow(i18n)
+    window.set_close_to_tray(settings.minimize_to_tray)
 
-    # 游戏列表
+    # 游戏列表 + 恢复上次选择
     game_list = [(g.name, g) for g in games]
     window.set_games(game_list)
+    last_game = settings.selected_game
+    if last_game:
+        window.restore_selected_game(last_game)
 
     # ── 创建系统托盘 ──
     tray = SystemTray(i18n)
@@ -417,6 +421,7 @@ def run_gui(args):
         dlg.language_changed.connect(on_language_changed)
         if dlg.exec():
             settings.save(SETTINGS_PATH)
+            window.set_close_to_tray(settings.minimize_to_tray)
             window.refresh_ui()
             tray.refresh_ui()
 
@@ -434,6 +439,14 @@ def run_gui(args):
     window.stop_requested.connect(on_stop)
     window.settings_requested.connect(on_settings)
     window.about_requested.connect(on_about)
+
+    def on_game_changed(_index):
+        gc = window._game_panel.current_data()
+        if gc:
+            settings._data.setdefault("gui", {})["selected_game"] = gc.name
+            settings.save(SETTINGS_PATH)
+
+    window.game_changed.connect(on_game_changed)
 
     # ── 连接托盘信号 ──
     tray.show_requested.connect(on_show)

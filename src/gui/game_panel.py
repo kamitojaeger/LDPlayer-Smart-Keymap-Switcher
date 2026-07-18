@@ -63,6 +63,14 @@ class GamePanel(QWidget):
     def current_index(self) -> int:
         return self._combo.currentIndex()
 
+    def select_by_name(self, name: str):
+        """根据 display name 设置选中项。"""
+        idx = self._combo.findText(name)
+        if idx >= 0:
+            self._combo.blockSignals(True)
+            self._combo.setCurrentIndex(idx)
+            self._combo.blockSignals(False)
+
     def current_data(self):
         """返回当前选中项的 data（GameConfig 对象）。"""
         return self._combo.currentData()

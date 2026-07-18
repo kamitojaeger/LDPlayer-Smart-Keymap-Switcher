@@ -401,6 +401,8 @@ class AppSettings:
             "show_toast": True,
             "toast_duration_ms": 3000,
             "language": "",
+            "minimize_to_tray": False,
+            "selected_game": "",
         },
         "advanced": {
             "injector_path_override": None,
@@ -467,6 +469,16 @@ class AppSettings:
     @property
     def toast_duration_ms(self) -> int:
         return self._data.get("gui", {}).get("toast_duration_ms", 3000)
+
+    @property
+    def minimize_to_tray(self) -> bool:
+        """关闭按钮是否最小化到托盘（否则退出程序）。默认 False。"""
+        return self._data.get("gui", {}).get("minimize_to_tray", False)
+
+    @property
+    def selected_game(self) -> str:
+        """上次选择的游戏名称。默认 ""。"""
+        return self._data.get("gui", {}).get("selected_game", "")
 
     # -- advanced section --
 

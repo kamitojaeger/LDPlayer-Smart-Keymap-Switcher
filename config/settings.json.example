@@ -10,13 +10,16 @@
     "show_debug_window": false,
     "match_threshold": 0.75,
     "save_debug_screenshot": false,
-    "none_state_switch": false
+    "none_state_enabled": true,
+    "none_state_frames": 200
   },
   "gui": {
     "start_minimized": false,
     "show_toast": true,
     "toast_duration_ms": 3000,
-    "language": ""
+    "language": "",
+    "minimize_to_tray": false,
+    "selected_game": ""
   },
   "advanced": {
     "injector_path_override": null,

@@ -162,6 +162,10 @@ class SettingsDialog(QDialog):
         none_widget.setLayout(none_row)
         gen_form.addRow(i.t("settings.none_state_enabled"), none_widget)
 
+        # 关闭行为
+        self._minimize_tray_check = QCheckBox()
+        gen_form.addRow(i.t("settings.minimize_to_tray"), self._minimize_tray_check)
+
         # 语言
         self._lang_combo = QComboBox()
         self._lang_combo.addItem("中文", "zh_CN")
@@ -244,6 +248,7 @@ class SettingsDialog(QDialog):
         self._save_debug_check.setChecked(s.save_debug_screenshot)
         self._none_state_check.setChecked(s.none_state_enabled)
         self._none_state_spin.setValue(s.none_state_frames)
+        self._minimize_tray_check.setChecked(s.minimize_to_tray)
 
         # 语言
         lang = s._data.get("gui", {}).get("language", "zh_CN")
@@ -296,6 +301,9 @@ class SettingsDialog(QDialog):
             self._none_state_check.isChecked()
         s._data.setdefault("monitor", {})["none_state_frames"] = \
             self._none_state_spin.value()
+
+        s._data.setdefault("gui", {})["minimize_to_tray"] = \
+            self._minimize_tray_check.isChecked()
 
         # 语言
         lang = self._lang_combo.currentData()

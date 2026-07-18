@@ -35,6 +35,7 @@ class MainWindow(QMainWindow):
         super().__init__(parent)
         self._i18n = i18n
         self._monitoring = False
+        self._close_to_tray = False  # 默认关闭=退出
         self._init_ui()
         self._translate_ui()
 
@@ -177,6 +178,10 @@ class MainWindow(QMainWindow):
         """设置游戏列表 [(name, index), ...]"""
         self._game_panel.set_games(games)
 
+    def restore_selected_game(self, game_name: str):
+        """根据游戏名称恢复下拉框选中项。"""
+        self._game_panel.select_by_name(game_name)
+
     def current_game_index(self) -> int:
         """当前选中的游戏索引。"""
         return self._game_panel.current_index()
@@ -244,7 +249,13 @@ class MainWindow(QMainWindow):
         self._log_view.setTextCursor(cursor)
         self._log_view.ensureCursorVisible()
 
+    def set_close_to_tray(self, enabled: bool):
+        self._close_to_tray = enabled
+
     def closeEvent(self, event: QCloseEvent):
-        """关闭窗口 → 最小化到托盘。"""
-        event.ignore()
-        self.hide()
+        """关闭窗口：根据设置决定最小化到托盘或退出。"""
+        if self._close_to_tray:
+            event.ignore()
+            self.hide()
+        else:
+            event.accept()

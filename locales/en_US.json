@@ -45,6 +45,7 @@
   "settings.save_debug_screenshot": "Save Debug Screenshot",
   "settings.none_state_enabled": "Switch to empty keymap after N frames of no match",
   "settings.none_state_frames_unit": "frames",
+  "settings.minimize_to_tray": "Minimize to tray on close",
   "settings.save": "Save",
   "settings.cancel": "Cancel",
   "settings.saved": "Settings Saved",

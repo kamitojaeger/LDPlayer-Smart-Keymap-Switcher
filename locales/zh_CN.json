@@ -45,6 +45,7 @@
   "settings.save_debug_screenshot": "保存调试截图",
   "settings.none_state_enabled": "N帧无匹配则切换到空白按键",
   "settings.none_state_frames_unit": "帧",
+  "settings.minimize_to_tray": "点击关闭按钮最小化到托盘",
   "settings.save": "保存",
   "settings.cancel": "取消",
   "settings.saved": "设置已保存",
