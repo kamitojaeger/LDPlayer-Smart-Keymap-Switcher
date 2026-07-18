@@ -66,6 +66,7 @@ class MonitorConfig:
                  initial_state: str = None,
                  none_state_config: dict = None,
                  none_state_frames: int = 20,
+                 disc_reset_enabled: bool = False,
                  poll_interval_ms: int = 333,
                  debounce_count: int = 1,
                  match_threshold: float = 0.75,
@@ -111,6 +112,7 @@ class MonitorConfig:
         self.initial_state = initial_state
         self.none_state_config = none_state_config  # None=禁用, dict=启用
         self.none_state_frames = none_state_frames  # 进入 none 的去抖帧数
+        self.disc_reset_enabled = disc_reset_enabled
         self.poll_interval_ms = poll_interval_ms
         self.debounce_count = debounce_count
         self.match_threshold = match_threshold
@@ -284,11 +286,9 @@ try:
                     if new_state == STATE_NONE:
                         ns = config.none_state_config
                         kmp = ns["keymap"] if ns else None
-                        mouse_key = ns.get("mouse_drag_key") if ns else None
                     else:
                         state_cfg = config.states_config[new_state]
                         kmp = state_cfg["keymap"]
-                        mouse_key = state_cfg.get("mouse_drag_key")
 
                     # 键位去重：.kmp 相同则跳过 injector 调用
                     if kmp is not None and kmp == _last_loaded_kmp:
@@ -304,11 +304,12 @@ try:
                             f"[Switch] {old_state} → {new_state}"
                         )
 
-                        # 解析旧 .kmp 的方向盘左键（用于切换后重置 LDPlayer 方向状态）
+                        # 方向盘左键（game.json detection.disc_reset_enabled 控制）
                         disc_left_key = None
-                        old_kmp = _last_loaded_kmp
-                        if old_kmp and os.path.exists(old_kmp):
-                            disc_left_key = injector.parse_kmp_disc_left_key(old_kmp)
+                        if config.disc_reset_enabled:
+                            old_kmp = _last_loaded_kmp
+                            if old_kmp and os.path.exists(old_kmp):
+                                disc_left_key = injector.parse_kmp_disc_left_key(old_kmp)
 
                         # 切换前释放所有按下的按键
                         injector.release_held_keys()
@@ -332,22 +333,26 @@ try:
                             # 切换后再释放一次按键
                             injector.release_held_keys()
 
-                            # Mouse drag key
-                            if mouse_key is None:
-                                mouse_key = injector.parse_kmp_mouse_drag_key(kmp)
+                            # Mouse drag key: 从切换后的 .kmp 读 ClassMouseDrag
+                            mouse_key = injector.parse_kmp_mouse_drag_key(kmp)
                             if mouse_key is not None:
-                                injector.send_mouse_drag_key(mouse_key)
-                                self.log_message.emit(
-                                    f"[MouseDrag] sent VK={mouse_key}"
-                                )
+                                if injector.is_mouse_captured():
+                                    self.log_message.emit(
+                                        f"[MouseDrag] skipped — already captured"
+                                    )
+                                else:
+                                    injector.send_mouse_drag_key(mouse_key)
+                                    self.log_message.emit(
+                                        f"[MouseDrag] sent VK={mouse_key}"
+                                    )
 
-                            # 方向盘左键 tap — 重置 LDPlayer 方向状态机（MouseDrag 之后）
+                            # 方向盘左键 tap — 重置 LDPlayer 方向状态机
                             if disc_left_key is not None:
                                 key_name = chr(disc_left_key) if 0x20 <= disc_left_key < 0x7F else "?"
                                 user32 = ctypes.windll.user32
                                 user32.keybd_event(disc_left_key, 0, 0, 0)
                                 import time as _disc_time
-                                _disc_time.sleep(0.005)  # 5ms 确保 LDPlayer 能区分按下/抬起
+                                _disc_time.sleep(0.005)
                                 user32.keybd_event(disc_left_key, 0, 2, 0)
                                 self.log_message.emit(
                                     f"[DiscReset] tapped left key '{key_name}' vk={disc_left_key}"

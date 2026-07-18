@@ -16,6 +16,7 @@
     "method": "template_matching",
     "interval_ms": 500,
     "threshold": 0.75,
+    "disc_reset_enabled": true,
     "feature_mask": {
       "enabled": true,
       "dark_percentile": 22,
@@ -396,6 +397,10 @@
         {
           "path": "templates/walk+swim+flying/jump.png",
           "region": "br_jump"
+        },
+        {
+          "path": "templates/walk+swim+flying/Flying.png",
+          "region": "tr_flying",
         }
       ],
       "negative_penalty": 0.5

@@ -331,6 +331,7 @@ class GameConfig:
                 else det.get("interval_ms", 333),
             debounce_count=debounce_count,
             match_threshold=det.get("threshold", 0.75),
+            disc_reset_enabled=det.get("disc_reset_enabled", False),
             priorities=priorities,
         )
 

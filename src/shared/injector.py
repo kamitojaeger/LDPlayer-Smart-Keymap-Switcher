@@ -168,6 +168,17 @@ class Injector:
         user32.keybd_event(vk_code, 0, 2, 0)           # up (KEYEVENTF_KEYUP)
 
     @staticmethod
+    def is_mouse_captured() -> bool:
+        """检测鼠标是否被 LDPlayer 捕获（光标隐藏 = 射击视角中）。"""
+        class _CI(ctypes.Structure):
+            _fields_ = [("cbSize", ctypes.c_uint), ("flags", ctypes.c_uint),
+                        ("hCursor", ctypes.c_void_p), ("ptScreenPos", ctypes.c_long * 2)]
+        ci = _CI()
+        ci.cbSize = ctypes.sizeof(_CI)
+        ctypes.windll.user32.GetCursorInfo(ctypes.byref(ci))
+        return ci.flags == 0  # 0 = hidden = captured
+
+    @staticmethod
     def release_held_keys():
         """扫描并释放所有当前按下的按键（keybd_event KEYUP）。
 
