@@ -370,14 +370,14 @@ static bool SetTargetKMP(const wchar_t* filename, const wchar_t* fullPath, DWORD
 static bool TriggerOnceAndVerify(HWND hwnd, const wchar_t* kmpPath) {
     printf("\n--- Trigger one Ctrl+F (CALL hook + CFW redirect) ---\n");
     SetForegroundWindow(hwnd);
-    Sleep(200);
+    Sleep(50);
     keybd_event(VK_CONTROL, 0, 0, 0);
-    Sleep(50);
+    Sleep(20);
     keybd_event('F', 0, 0, 0);
-    Sleep(50);
+    Sleep(20);
     keybd_event('F', 0, KEYEVENTF_KEYUP, 0);
     keybd_event(VK_CONTROL, 0, KEYEVENTF_KEYUP, 0);
-    Sleep(300);
+    Sleep(100);
 
     SharedData* p = OpenSharedMem();
     if (!p) return false;
