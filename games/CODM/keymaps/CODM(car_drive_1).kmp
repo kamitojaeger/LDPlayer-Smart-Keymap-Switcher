@@ -648,60 +648,6 @@
         {
             "class": "ClassKeyboardCurve",
             "data": {
-                "key": 65,
-                "secondKey": 0,
-                "curve": [
-                    {
-                        "x": 7229,
-                        "y": 7044,
-                        "timing": 0
-                    },
-                    {
-                        "x": 7229,
-                        "y": 7044,
-                        "timing": 114
-                    }
-                ],
-                "extraData": "",
-                "description": "",
-                "moreDescription": "",
-                "hintVisible": true,
-                "hintOffset": {
-                    "x": 0,
-                    "y": 0
-                }
-            }
-        },
-        {
-            "class": "ClassKeyboardCurve",
-            "data": {
-                "key": 68,
-                "secondKey": 0,
-                "curve": [
-                    {
-                        "x": 8744,
-                        "y": 7088,
-                        "timing": 0
-                    },
-                    {
-                        "x": 8744,
-                        "y": 7088,
-                        "timing": 88
-                    }
-                ],
-                "extraData": "",
-                "description": "",
-                "moreDescription": "",
-                "hintVisible": true,
-                "hintOffset": {
-                    "x": 0,
-                    "y": 0
-                }
-            }
-        },
-        {
-            "class": "ClassKeyboardCurve",
-            "data": {
                 "key": 32,
                 "secondKey": 0,
                 "curve": [
@@ -819,13 +765,67 @@
                     "y": 0
                 }
             }
+        },
+        {
+            "class": "ClassKeyboardCurve",
+            "data": {
+                "key": 65,
+                "secondKey": 0,
+                "curve": [
+                    {
+                        "x": 7484,
+                        "y": 7289,
+                        "timing": 0
+                    },
+                    {
+                        "x": 7484,
+                        "y": 7289,
+                        "timing": 114
+                    }
+                ],
+                "extraData": "",
+                "description": "",
+                "moreDescription": "",
+                "hintVisible": true,
+                "hintOffset": {
+                    "x": 0,
+                    "y": 0
+                }
+            }
+        },
+        {
+            "class": "ClassKeyboardCurve",
+            "data": {
+                "key": 68,
+                "secondKey": 0,
+                "curve": [
+                    {
+                        "x": 8926,
+                        "y": 7289,
+                        "timing": 0
+                    },
+                    {
+                        "x": 8926,
+                        "y": 7289,
+                        "timing": 88
+                    }
+                ],
+                "extraData": "",
+                "description": "",
+                "moreDescription": "",
+                "hintVisible": true,
+                "hintOffset": {
+                    "x": 0,
+                    "y": 0
+                }
+            }
         }
     ],
     "configInfo": {
         "version": 0,
         "versionMessage": "",
         "packageNameType": 1,
-        "packageNamePattern": "com.activision.callofduty.shooter|com.tencent.tmgp.kr.codm|com.garena.game.codm|com.android.gallery3d",
+        "packageNamePattern": "com.activision.callofduty.shooter|com.tencent.tmgp.kr.codm|com.garena.game.codm",
         "resolutionType": 1,
         "resolutionPattern": {
             "width": 1600,

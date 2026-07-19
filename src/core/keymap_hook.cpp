@@ -175,6 +175,15 @@ static HANDLE WINAPI HkCW(LPCWSTR n,DWORD a,DWORD s,LPSECURITY_ATTRIBUTES sa,DWO
                 if(idx < 8) g_s->kmpHistoryRedirected[idx] = 1;
                 n = g_s->fullPath;
             }
+            // Clear CFW redirect flag after the expected 2 redirects
+            // of a switch cycle (indices 1 and 2 of kmpHistory).
+            // Also catches stale reads (idx >= 3) from previous injector
+            // sessions, preventing cross-game .kmp overwrite.
+            // This runs inside the DLL CFW hook itself, independent of
+            // HookStub timing — works even if post-call .kmp I/O differs
+            // between LDPlayer versions.
+            if((g_s->flags & 1) && idx >= 2)
+                g_s->flags &= ~1u;
         }
         }
     }

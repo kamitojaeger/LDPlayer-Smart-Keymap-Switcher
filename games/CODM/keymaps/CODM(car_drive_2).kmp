@@ -792,7 +792,7 @@
         "version": 0,
         "versionMessage": "",
         "packageNameType": 1,
-        "packageNamePattern": "com.activision.callofduty.shooter|com.tencent.tmgp.kr.codm|com.garena.game.codm|com.android.gallery3d",
+        "packageNamePattern": "com.activision.callofduty.shooter|com.tencent.tmgp.kr.codm|com.garena.game.codm",
         "resolutionType": 1,
         "resolutionPattern": {
             "width": 1600,
